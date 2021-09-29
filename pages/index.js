@@ -1,11 +1,14 @@
+import { useContext } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import data from "../utils/data";
 import Card from "@material-ui/core/Card";
 import Link from "next/link";
 import { CardContent, makeStyles } from "@material-ui/core";
-import MenuItem from "../components/MenuItem";
 import flatten from "lodash/flatten";
+
+import MenuItem from "../components/MenuItem";
+import data from "../utils/data";
+import SearchContext from "../utils/search-context";
 
 const useStyles = makeStyles({
   root: {
@@ -20,9 +23,10 @@ const useStyles = makeStyles({
 export default function Home() {
   const classes = useStyles();
 
-  let transformed = [];
-  Object.values(data).map((arr) => arr.map((item) => transformed.push(item)));
-  console.log("object entries", Object.entries(data));
+  // let transformed = [];
+  // Object.values(data).map((arr) => arr.map((item) => transformed.push(item)));
+
+  const { filteredMenu } = useContext(SearchContext);
 
   // map = [x, y, z] -> [fn(x), fn(y), fn(z)]
   // reduce = [x, y, z] -> A
@@ -53,7 +57,7 @@ export default function Home() {
             gridGap: 20,
           }}
         >
-          {transformed.map((item) => {
+          {filteredMenu.map((item) => {
             return <MenuItem key={item.name} item={item} />;
           })}
         </div>

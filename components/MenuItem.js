@@ -17,6 +17,11 @@ import { makeStyles } from "@material-ui/core";
 import data from "../utils/data";
 
 const useStyles = makeStyles(() => ({
+  menuItem: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
   proteins: {
     overflow: "auto",
     display: "block",
@@ -85,7 +90,7 @@ const MenuItem = (props) => {
   }, {});
 
   return (
-    <Card>
+    <Card className={classes.menuItem}>
       <CardHeader title={name} />
       <form onSubmit={formik.handleSubmit}>
         <CardContent>
@@ -130,8 +135,8 @@ const MenuItem = (props) => {
             ) : null}
           </div>
         </CardContent>
-        <CardActions style={{ display: "flex", alignItems: "flex-end" }}>
-          <IconButton>
+        <CardActions>
+          <IconButton onClick={formik.handleSubmit}>
             <AddIcon />
           </IconButton>
           {category !== "appetizers" &&

@@ -12,11 +12,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import SearchContext from "../utils/search-context";
 import { useRouter } from "next/router";
 
-const flattenedData = Object.values(data).reduce(
-  (acc, nested) => [...acc, ...nested],
-  []
-);
-
 const useStyles = makeStyles((theme) => ({
   appbar: {
     background: "white",
@@ -64,23 +59,7 @@ const MainNavigation = () => {
     setAnchorEl(null);
   };
 
-  // const { setSearchQuery, searchQuery } = useContext(SearchContext);
-
-  const [searchQuery, setSearchQuery] = useState();
-  const [filteredMenu, setFilteredMenu] = useState([]);
-  const router = useRouter();
-
-  useEffect(() => {
-    const searchResults = flattenedData.reduce((acc, item) => {
-      if (item.name.includes(searchQuery)) {
-        acc.push(item);
-      }
-      return acc;
-    }, []);
-    console.log("search results", searchResults);
-  }, [searchQuery]);
-
-  console.log(searchQuery);
+  const { search, searchQuery } = useContext(SearchContext);
 
   return (
     <AppBar position="sticky" className={classes.appbar}>
@@ -109,7 +88,7 @@ const MainNavigation = () => {
               placeholder="search..."
               type="text"
               name="s"
-              onInput={(e) => setSearchQuery(e.target.value)}
+              onChange={search}
               value={searchQuery}
             />
           </div>
