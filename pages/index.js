@@ -31,11 +31,6 @@ export default function Home() {
   // map = [x, y, z] -> [fn(x), fn(y), fn(z)]
   // reduce = [x, y, z] -> A
 
-  // const flattened = Object.values(data).reduce(
-  //   (acc, nested) => [...acc, ...nested],
-  //   []
-  // );
-
   // console.log("flattened", flattened);
 
   // const map = (array, fn) => array.reduce((acc, x) => [...acc, fn(x)], []);

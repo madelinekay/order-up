@@ -15,12 +15,9 @@ const flattenedData = Object.values(data).reduce(
 );
 
 export const SearchContextProvider = (props) => {
-  //   const [searchQuery, setSearchQuery] = useState("");
   const [filteredMenu, setFilteredMenu] = useState([]);
   const router = useRouter();
 
-  //   const { search } = window.location;
-  //   const searchQuery = new URLSearchParams(search).get("q");
   const searchQuery = router.query.q || "";
 
   const performSearch = (e) => {
@@ -37,11 +34,9 @@ export const SearchContextProvider = (props) => {
       }
       return acc;
     }, []);
-    console.log("search results", searchResults);
+
     setFilteredMenu(searchResults);
   }, [searchQuery]);
-
-  console.log("search query", searchQuery);
 
   const contextValue = {
     searchQuery,

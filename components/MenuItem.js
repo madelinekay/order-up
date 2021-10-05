@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
@@ -12,7 +12,11 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import Checkbox from "@material-ui/core/Checkbox";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, FormControl, TextField } from "@material-ui/core";
+import CartContext from "../utils/cart-context";
+import { useContext } from "react";
+import StarIcon from "@material-ui/icons/Star";
+import NotesIcon from "@material-ui/icons/Notes";
 
 import data from "../utils/data";
 
@@ -47,10 +51,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 const MenuItem = (props) => {
-  const { options = [], name } = props.item;
+  const [notes, setNotes] = useState();
+
+  const { options = [], name, price } = props.item;
   // const { category } = props;
   const classes = useStyles();
   // console.log("MenuItem item", props.item);
+  const { addItem } = useContext(CartContext);
 
   const category = useMemo(() => {
     return (
@@ -61,27 +68,6 @@ const MenuItem = (props) => {
     );
   }, [props.category, name]);
 
-  const formik = useFormik({
-    initialValues: {
-      protein: null,
-      rice: null,
-      extras: null,
-      notes: "",
-      stars: 1,
-    },
-
-    onSubmit: async (values) => {
-      const { protein, rice, extras, notes, stars } = values;
-      const data = {
-        protein,
-        rice,
-        extras,
-        notes,
-        stars,
-      };
-    },
-  });
-
   const groupedOptions = options.reduce((acc, option) => {
     return {
       ...acc,
@@ -89,79 +75,168 @@ const MenuItem = (props) => {
     };
   }, {});
 
+  const flattenedOptions = Object.values(groupedOptions).reduce(
+    (acc, nested) => [...acc, ...nested],
+    []
+  );
+  const handleStars = (event) => {
+    console.log("handle stars", event);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      protein: "",
+      rice: "",
+      extras: [],
+      notes: "",
+      stars: 0,
+    },
+
+    onSubmit: async (values) => {
+      const { protein, rice, extras = [], notes, stars } = values;
+
+      let ricePrice = 0;
+      if (rice.length > 0) {
+        ricePrice = flattenedOptions.find(
+          (item) => item.name === rice
+        ).modifier;
+      }
+      let proteinPrice = 0;
+      if (protein.length > 0) {
+        proteinPrice = flattenedOptions.find(
+          (item) => item.name === protein
+        ).modifier;
+      }
+
+      let extraPrice = extras.reduce(
+        (acc, extra) =>
+          (acc += flattenedOptions.find(
+            (item) => item.name === extra
+          ).modifier),
+        0
+      );
+
+      const itemPrice = price + ricePrice + proteinPrice + extraPrice;
+
+      const cartItem = {
+        name,
+        protein,
+        rice,
+        extras,
+        notes,
+        stars,
+        itemPrice,
+      };
+
+      addItem(cartItem);
+    },
+  });
+
+  const handleStarsChanged = (starCount) => {
+    formik.setFieldValue("stars", starCount);
+  };
+
   return (
     <Card className={classes.menuItem}>
-      <CardHeader title={name} />
-      <form onSubmit={formik.handleSubmit}>
-        <CardContent>
-          {groupedOptions.protein ? (
-            <RadioGroup className={classes.proteins}>
-              {groupedOptions.protein.map((value) => (
-                <FormControlLabel
-                  key={value.name}
-                  value={value.name}
-                  control={<Radio />}
-                  label={value.name}
-                />
-              ))}
-            </RadioGroup>
-          ) : null}
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <CardHeader title={name} />
+        <IconButton onClick={() => setNotes(true)}>
+          <NotesIcon />
+        </IconButton>
+      </div>
 
-          <div className={classes.otherOptions}>
-            {groupedOptions.rice ? (
-              <RadioGroup className={classes.rice}>
-                {groupedOptions.rice.map((value) => (
+      <form onSubmit={formik.handleSubmit}>
+        <FormControl>
+          <CardContent>
+            {groupedOptions.protein ? (
+              <RadioGroup className={classes.proteins}>
+                {groupedOptions.protein.map((option) => (
                   <FormControlLabel
-                    key={value.name}
-                    value={value.name}
+                    key={option.name}
+                    value={option.name}
                     control={<Radio />}
-                    label={value.name}
+                    label={option.name}
+                    name="protein"
+                    onChange={formik.handleChange}
                   />
                 ))}
               </RadioGroup>
             ) : null}
 
-            {groupedOptions.extras ? (
-              <FormGroup className={classes.extras}>
-                {groupedOptions.extras.map((value, index) => (
-                  <FormControlLabel
-                    key={index}
-                    control={<Checkbox />}
-                    value={value.name}
-                    label={value.name}
-                  />
-                ))}
-              </FormGroup>
+            <div className={classes.otherOptions}>
+              {groupedOptions.rice ? (
+                <RadioGroup className={classes.rice}>
+                  {groupedOptions.rice.map((option) => (
+                    <FormControlLabel
+                      key={option.name}
+                      value={option.name}
+                      control={<Radio />}
+                      label={option.name}
+                      name="rice"
+                      onChange={formik.handleChange}
+                    />
+                  ))}
+                </RadioGroup>
+              ) : null}
+
+              {groupedOptions.extras ? (
+                <FormGroup className={classes.extras}>
+                  {groupedOptions.extras.map((option) => (
+                    <FormControlLabel
+                      key={option.name}
+                      control={<Checkbox />}
+                      value={option.name}
+                      label={option.name}
+                      name="extras"
+                      onClick={formik.handleChange}
+                    />
+                  ))}
+                </FormGroup>
+              ) : null}
+            </div>
+            {notes ? (
+              <TextField
+                style={{ width: "100%" }}
+                variant="filled"
+                size="small"
+                id="notes"
+                name="notes"
+                placeholder="add notes"
+                value={formik.values.notes}
+                onChange={formik.handleChange}
+              />
             ) : null}
-          </div>
-        </CardContent>
-        <CardActions>
-          <IconButton onClick={formik.handleSubmit}>
-            <AddIcon />
-          </IconButton>
-          {category !== "appetizers" &&
-          category !== "sides" &&
-          category !== "desserts" &&
-          category !== "drinks" ? (
-            <>
-              <IconButton>
-                <StarBorderIcon />
+          </CardContent>
+          <CardActions>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                {category !== "appetizers" &&
+                category !== "sides" &&
+                category !== "desserts" &&
+                category !== "drinks"
+                  ? [1, 2, 3, 4, 5].map((count) => (
+                      <IconButton
+                        key={count}
+                        onClick={() => handleStarsChanged(count)}
+                      >
+                        {count <= formik.values.stars ? (
+                          <StarIcon />
+                        ) : (
+                          <StarBorderIcon />
+                        )}
+                      </IconButton>
+                    ))
+                  : null}
+              </div>
+              <IconButton
+                onClick={formik.handleSubmit}
+                style={{ color: "blue" }}
+              >
+                <AddIcon size="medium" />
               </IconButton>
-              <IconButton>
-                <StarBorderIcon />
-              </IconButton>
-              <IconButton>
-                <StarBorderIcon />
-              </IconButton>
-              <IconButton>
-                <StarBorderIcon />
-              </IconButton>
-              <IconButton>
-                <StarBorderIcon />
-              </IconButton>
-            </>
-          ) : null}
-        </CardActions>
+            </div>
+          </CardActions>
+        </FormControl>
       </form>
     </Card>
   );

@@ -19,18 +19,18 @@ const entreeCurryOptions = [
   makeOption("Shrimp", 1, "protein"),
   makeOption("WR", 0, "rice"),
   makeOption("BR", 1, "rice"),
-  makeOption("Extra meat", 2, "extras"),
+  makeOption("Extra protein", 2, "extras"),
   makeOption("Extra veggies", 2, "extras"),
 ];
 
 const noodleFrOptions = [
-  makeOption("C", 0, "protein"),
-  makeOption("P", 0, "protein"),
-  makeOption("T", 0, "protein"),
-  makeOption("TE", 1, "protein"),
-  makeOption("B", 1, "protein"),
-  makeOption("S", 1, "protein"),
-  makeOption("Extra meat", 2, "extras"),
+  makeOption("Chicken", 0, "protein"),
+  makeOption("Pork", 0, "protein"),
+  makeOption("Tofu", 0, "protein"),
+  makeOption("TEmpeh", 1, "protein"),
+  makeOption("Beef", 1, "protein"),
+  makeOption("Shrimp", 1, "protein"),
+  makeOption("Extra protein", 2, "extras"),
   makeOption("Extra veggies", 2, "extras"),
 ];
 
@@ -97,7 +97,7 @@ const data = {
       makeOption("pork", 0, "protein"),
       makeOption("WR", 0, "rice"),
       makeOption("BR", 1, "rice"),
-      makeOption("extra meat", 2, "extras"),
+      makeOption("extra protein", 2, "extras"),
       makeOption("extra veggies", 2, "extras"),
     ]),
     makeItem("Ginger stir fry", 11.95, entreeCurryOptions),
@@ -107,13 +107,13 @@ const data = {
     makeItem("STIR FRIED beef", 12.95, [
       makeOption("WR", 0, "rice"),
       makeOption("BR", 1, "rice"),
-      makeOption("extra meat", 2, "extras"),
+      makeOption("extra protein", 2, "extras"),
       makeOption("extra veggies", 2, "extras"),
     ]),
   ],
   curries: [
     makeItem("tropical JADE", 15.95, entreeCurryOptions),
-    makeItem("Y curry with fish", 15.95, [
+    makeItem("Yellow curry with fish", 15.95, [
       makeOption("Chicken", -4, "protein"),
       makeOption("Pork", -4, "protein"),
       makeOption("Tofu", -4, "protein"),
@@ -122,7 +122,7 @@ const data = {
       makeOption("Shrimp", -3, "protein"),
       makeOption("WR", 0, "rice"),
       makeOption("BR", 1, "rice"),
-      makeOption("Extra meat", 2, "extras"),
+      makeOption("Extra protein", 2, "extras"),
       makeOption("Extra veggies", 2, "extras"),
     ]),
     makeItem("the EVERGREEN state curry", 13.95, entreeCurryOptions),

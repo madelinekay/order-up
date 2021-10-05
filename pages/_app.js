@@ -13,14 +13,13 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    // <CartContextProvider>
-    <SearchContextProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </SearchContextProvider>
-
-    // </CartContextProvider>
+    <CartContextProvider>
+      <SearchContextProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </SearchContextProvider>
+    </CartContextProvider>
   );
 }
 

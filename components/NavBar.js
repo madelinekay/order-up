@@ -10,7 +10,7 @@ import data from "../utils/data";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchContext from "../utils/search-context";
-import { useRouter } from "next/router";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -132,8 +132,15 @@ const MainNavigation = () => {
           </Menu>
           <div className={classes.navItem}>
             <IconButton color="inherit">
-              <Link href={"/"}>
+              <Link href={"/cart"}>
                 <ShoppingCartIcon />
+              </Link>
+            </IconButton>
+          </div>
+          <div className={classes.navItem}>
+            <IconButton color="inherit">
+              <Link href={"/orders"}>
+                <MenuIcon />
               </Link>
             </IconButton>
           </div>
