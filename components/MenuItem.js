@@ -150,9 +150,9 @@ const MenuItem = (props) => {
           <CardContent>
             {groupedOptions.protein ? (
               <RadioGroup className={classes.proteins}>
-                {groupedOptions.protein.map((option) => (
+                {groupedOptions.protein.map((option, index) => (
                   <FormControlLabel
-                    key={option.name}
+                    key={index}
                     value={option.name}
                     control={<Radio />}
                     label={option.name}
@@ -166,9 +166,9 @@ const MenuItem = (props) => {
             <div className={classes.otherOptions}>
               {groupedOptions.rice ? (
                 <RadioGroup className={classes.rice}>
-                  {groupedOptions.rice.map((option) => (
+                  {groupedOptions.rice.map((option, index) => (
                     <FormControlLabel
-                      key={option.name}
+                      key={index}
                       value={option.name}
                       control={<Radio />}
                       label={option.name}
@@ -181,9 +181,9 @@ const MenuItem = (props) => {
 
               {groupedOptions.extras ? (
                 <FormGroup className={classes.extras}>
-                  {groupedOptions.extras.map((option) => (
+                  {groupedOptions.extras.map((option, index) => (
                     <FormControlLabel
-                      key={option.name}
+                      key={index}
                       control={<Checkbox />}
                       value={option.name}
                       label={option.name}

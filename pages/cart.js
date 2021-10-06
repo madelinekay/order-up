@@ -8,6 +8,7 @@ import {
   CardActions,
   CardHeader,
   Input,
+  TextField,
 } from "@material-ui/core";
 
 const Cart = () => {
@@ -15,20 +16,18 @@ const Cart = () => {
   const taxTotal = total * 0.065 + total;
   console.log(cart);
 
-  const [name, setName] = useState();
+  const [name, setName] = useState("");
 
   const handleName = (event) => {
     const enteredName = event.target.value;
     setName(enteredName);
   };
-  console.log("name", name);
 
   return (
     <div>
       {cart.length > 0 ? (
         <div>
-          <Input
-            TextField
+          <TextField
             style={{ width: "100%" }}
             variant="filled"
             size="small"
@@ -38,8 +37,8 @@ const Cart = () => {
             onChange={(event) => handleName(event)}
           />
           <div>
-            {cart.map((item) => (
-              <CartItem key={item.name} item={item} />
+            {cart.map((item, index) => (
+              <CartItem key={index} item={item} />
             ))}
             <div>{`$${total.toFixed(2)}`}</div>
             <div>{`$${taxTotal.toFixed(2)}`}</div>
