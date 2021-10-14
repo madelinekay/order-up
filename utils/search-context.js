@@ -26,8 +26,10 @@ export const SearchContextProvider = (props) => {
     // setSearchQuery(value);
     router.push("/?q=" + value);
   };
+  console.log("SearchContextProvider");
 
   useEffect(() => {
+    console.log("useEffect");
     const searchResults = flattenedData.reduce((acc, item) => {
       if (item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
         acc.push(item);

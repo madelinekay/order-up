@@ -1,50 +1,81 @@
 import Link from "next/link";
 import { useContext, useState, useEffect } from "react";
-import { AppBar, Toolbar, makeStyles, IconButton } from "@material-ui/core";
+import {
+  AppBar,
+  Toolbar,
+  makeStyles,
+  IconButton,
+  TextField,
+  Button,
+  Chip,
+  InputAdornment,
+  Input,
+} from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import SearchIcon from "@material-ui/icons/Search";
-import InputBase from "@material-ui/core/InputBase";
+// import InputBase from "@material-ui/core/InputBase";
 import data from "../utils/data";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchContext from "../utils/search-context";
 import MenuIcon from "@material-ui/icons/Menu";
+import { BlockRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
-    background: "white",
-    color: "black",
+    backgroundColor: theme.palette.primary,
+    color: theme.palette.primary.dark,
+    border: `1px solid ${theme.palette.primary.dark}`,
   },
+
   toolbar: {
-    marginRight: theme.spacing(30),
-    marginLeft: theme.spacing(30),
+    display: "flex",
+    justifyContent: "space-evenly",
+    // marginRight: theme.spacing(30),
+    // marginLeft: theme.spacing(30),
   },
   menu: {
     display: "flex",
   },
   title: {
-    width: "50%",
+    color: "#70008e",
+    fontWeight: "bold",
   },
   navItem: {
     marginRight: theme.spacing(1),
   },
+
   search: {
+    // flex: 1,
+    // marginLeft: 60,
+    // marginRight: 140,
+    width: 300,
     position: "relative",
-    marginLeft: theme.spacing(20),
-    width: "100%",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: theme.palette.primary.light,
+    "&:hover": {
+      backgroundColor: "#fdf4ff",
+    },
   },
   searchIcon: {
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    color: theme.palette.primary.dark,
   },
-  input: {
-    marginLeft: theme.spacing(4),
+
+  inputRoot: {
+    color: "d128ff",
+  },
+  inputInput: {
+    backgroundColor: "#d128ff",
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
+    },
   },
 }));
 
@@ -64,86 +95,82 @@ const MainNavigation = () => {
   return (
     <AppBar position="sticky" className={classes.appbar}>
       <Toolbar className={classes.toolbar}>
-        <div className={classes.title}>Thai Pavillion Calculator</div>
+        <div className={classes.title}> Order Up | Thai Pavillion</div>
         <div className={classes.search}>
-          <div className={classes.searchIcon}>
-            <SearchIcon />
-          </div>
-          <div className={classes.input}>
-            <label
-              htmlFor="header-search"
-              style={{
-                clip: "rect(0 0 0 0)",
-                clipPath: "inset(50%)",
-                height: 1,
-                overflow: "hidden",
-                position: "absolute",
-                whiteSpace: "nowrap",
-                width: 1,
-              }}
-            >
-              <span className="visually-hidden">Search blog posts</span>
-            </label>
-            <InputBase
-              placeholder="search..."
-              type="text"
-              name="s"
-              onChange={search}
-              value={searchQuery}
-            />
-          </div>
-        </div>
+          <TextField
+            placeholder="Search…"
+            name="s"
+            onChange={search}
+            value={searchQuery}
+            classes={{
+              root: classes.inputRoot,
+              // input: classes.inputInput,
+            }}
+            fullWidth
+            InputProps={{
+              "aria-label": "search",
+              startAdornment: (
+                <InputAdornment position="start" style={{ marginLeft: 15 }}>
+                  <SearchIcon className={classes.searchIcon} />
+                </InputAdornment>
+              ),
 
-        <div className={classes.navItem}>
-          <IconButton color="inherit">
-            <Link href="/">
-              <HomeIcon />
-            </Link>
-          </IconButton>
+              disableUnderline: true,
+            }}
+          />
         </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: 150,
+          }}
+        >
+          {/* <div className={classes.navItem}> */}
+          <Link href="/">
+            <HomeIcon />
+          </Link>
+          {/* </div> */}
 
-        <div className={classes.menu}>
-          <div className={classes.navItem}>
-            <IconButton
+          <div className={classes.menu}>
+            {/* <div className={classes.navItem}> */}
+            <RestaurantMenuIcon
               color="inherit"
               id="basic-button"
               aria-controls="basic-menu"
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
+            />
+            {/* </div> */}
+
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
             >
-              <RestaurantMenuIcon />
-            </IconButton>
+              {Object.entries(data).map(([category]) => (
+                <Link href={"/" + category} key={category}>
+                  <MenuItem onClick={handleClose}>{category}</MenuItem>
+                </Link>
+              ))}
+            </Menu>
           </div>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            {Object.entries(data).map(([category]) => (
-              <Link href={"/" + category} key={category}>
-                <MenuItem onClick={handleClose}>{category}</MenuItem>
-              </Link>
-            ))}
-          </Menu>
-          <div className={classes.navItem}>
-            <IconButton color="inherit">
-              <Link href={"/cart"}>
-                <ShoppingCartIcon />
-              </Link>
-            </IconButton>
-          </div>
-          <div className={classes.navItem}>
-            <IconButton color="inherit">
-              <Link href={"/orders"}>
-                <MenuIcon />
-              </Link>
-            </IconButton>
-          </div>
+
+          {/* <div className={classes.navItem}> */}
+          <Link href={"/cart"}>
+            <ShoppingCartIcon />
+          </Link>
+          {/* </div> */}
+          {/* <div className={classes.navItem}> */}
+          <Link href={"/orders"}>
+            <MenuIcon />
+          </Link>
+          {/* </div> */}
         </div>
       </Toolbar>
     </AppBar>

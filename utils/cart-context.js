@@ -5,7 +5,6 @@ const CartContext = createContext({
   cart: [],
   orders: [],
   total: 0,
-  time: "",
   addItem: (item) => {},
   addToOrders: () => {},
   fetchOrders: () => {},
@@ -14,10 +13,14 @@ const CartContext = createContext({
 export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
-  const [time, setTime] = useState();
   const [orders, setOrders] = useState([]);
+  //there is a bug where if there are no recent orders mapping of object.entries fails despite state being initialized with empty array
 
   const router = useRouter();
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   const fetchOrders = async () => {
     let response = await fetch(
@@ -25,29 +28,39 @@ export const CartContextProvider = (props) => {
     );
 
     const result = await response.json();
-    const orders = Object.entries(result).map(([id, obj]) => ({
-      id,
-      ...obj,
-    }));
-    setOrders(orders);
+
+    if (result != undefined || result != null) {
+      const orders = Object.entries(result).map(([id, obj]) => ({
+        id,
+        ...obj,
+      }));
+
+      setOrders(orders);
+    }
+
+    console.log("fetch orders", orders);
   };
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const getTime = () => {
-    const cartTime = cart.reduce((acc, item) => {
-      // find category, add time to acc
-    }, 0);
-    const ongoingOrdersTime = orders.reduce((acc, order) => {
+  const getTime = (cartTime) => {
+    const ongoingOrders = orders.reduce((acc, order) => {
       if (order.status === "ongoing") {
-        const ongoingOrderTime = order.timeReady - Date.now();
-        acc += ongoingOrderTime;
+        return acc.concat(order);
       }
-    }, 0);
+      return acc;
+    }, []);
+    console.log("ongoingorders", ongoingOrders);
 
-    return cartTime + ongoingOrdersTime;
+    const ongoingOrdersTime = ongoingOrders.reduce((acc, order) => {
+      if (order == ongoingOrders[0]) {
+        // check if this comparison is kosher
+        return (acc += order.timeReadyMilliseconds - Date.now());
+      }
+      return acc + order.cartTime;
+    }, 0);
+    console.log("ongoing time", ongoingOrdersTime);
+    const totalTime = cartTime + ongoingOrdersTime;
+    console.log("total time", totalTime);
+    return totalTime;
   };
 
   const addItem = (item) => {
@@ -58,21 +71,32 @@ export const CartContextProvider = (props) => {
   };
 
   const addToOrders = async (name) => {
-    const timePlaced = new Date().toLocaleTimeString();
-    setTime(time);
-    setTotal((prevState) => prevState * 0.065 + prevState);
-
-    const timeReady = (getTime() + Date.now()).toLocaleTimeString;
-
+    // const timeReadyMilliseconds = getTime();
+    const cartTime = cart.reduce((acc, item) => {
+      if (item.name.includes("clay")) {
+        return (acc += 10 * 60000);
+      }
+      return (acc += 5 * 60000);
+    }, 0);
+    const timeReadyMilliseconds = getTime(cartTime) + Date.now();
+    const timeReady = new Date(timeReadyMilliseconds).toLocaleTimeString();
+    // console.log("timeReady", timeReady);
+    const taxTotal = total * 0.065 + total;
     let response = await fetch(
       "https://thai-calculator-default-rtdb.firebaseio.com/recentOrders.json",
       {
         method: "POST",
         body: JSON.stringify({
           items: cart,
-          timePlaced,
+          timePlaced: new Date().toLocaleTimeString(
+            ([], { hour: "2-digit", minute: "2-digit" })
+          ),
+          time: Date.now(),
+          cartTime,
           timeReady,
+          timeReadyMilliseconds,
           total,
+          taxTotal,
           name,
           status: "ongoing",
         }),
@@ -81,29 +105,37 @@ export const CartContextProvider = (props) => {
         },
       }
     );
+
+    fetchOrders();
+    router.push("/orders");
     setCart([]);
     setTotal(0);
-    router.push("/orders");
-    fetchOrders();
   };
 
-  // const markOrderComplete = (name) => {
-  //   const newOrders = orders.map((order) => {
-  //     if (order.name === name) {
-  //       order.status === "complete";
-  //     }
-  //   });
-  //   console.log(newOrders);
-  //   setOrders(newOrders);
-  // };
+  const markOrderComplete = async (id) => {
+    let response = await fetch(
+      `https://thai-calculator-default-rtdb.firebaseio.com/recentOrders/${id}.json`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          status: "completed",
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    fetchOrders();
+  };
 
   const contextValue = {
     cart,
     orders,
     total,
-    time,
     addItem,
     addToOrders,
+    markOrderComplete,
     fetchOrders,
   };
 

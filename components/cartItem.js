@@ -6,21 +6,22 @@ const cartItem = (props) => {
   const { name, itemPrice, protein, rice, extras, stars, notes } = props.item;
 
   return (
-    <Card>
-      <CardHeader title={name} />
-      <CardContent>
-        <ul>
-          {protein ? <li>{protein}</li> : null}
-          {rice ? <li>{rice}</li> : null}
-          {extras.map((extra) => (
-            <li key={extra}>{extra}</li>
-          ))}
-          {stars ? <li>{`${stars} stars`}</li> : null}
-          {notes ? <li>{notes}</li> : null}
-        </ul>
-        <div>{itemPrice}</div>
-      </CardContent>
-    </Card>
+    <div>
+      <div>
+        <div style={{ float: "right" }}>{`$${itemPrice}`}</div>
+        <div style={{ fontWeight: "bold" }}>{name}</div>
+      </div>
+
+      <ul>
+        {protein ? <li>{protein}</li> : null}
+        {rice ? <li>{rice}</li> : null}
+        {extras.map((extra) => (
+          <li key={extra}>{extra}</li>
+        ))}
+        {stars ? <li>{`${stars} stars`}</li> : null}
+        {notes ? <li>{notes}</li> : null}
+      </ul>
+    </div>
   );
 };
 

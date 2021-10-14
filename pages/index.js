@@ -10,19 +10,7 @@ import MenuItem from "../components/MenuItem";
 import data from "../utils/data";
 import SearchContext from "../utils/search-context";
 
-const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh",
-  },
-});
-
 export default function Home() {
-  const classes = useStyles();
-
   // let transformed = [];
   // Object.values(data).map((arr) => arr.map((item) => transformed.push(item)));
 

@@ -1,4 +1,4 @@
-const makeItem = (name, price, options = []) => ({
+const makeItem = (name, price, field, options = []) => ({
   name,
   price,
   options,
@@ -17,8 +17,10 @@ const entreeCurryOptions = [
   makeOption("TEmpeh", 1, "protein"),
   makeOption("Beef", 1, "protein"),
   makeOption("Shrimp", 1, "protein"),
+  makeOption("No protein/VEG", 0, "protein"),
   makeOption("WR", 0, "rice"),
   makeOption("BR", 1, "rice"),
+  makeOption("No rice", 0, "rice"),
   makeOption("Extra protein", 2, "extras"),
   makeOption("Extra veggies", 2, "extras"),
 ];
@@ -30,6 +32,7 @@ const noodleFrOptions = [
   makeOption("TEmpeh", 1, "protein"),
   makeOption("Beef", 1, "protein"),
   makeOption("Shrimp", 1, "protein"),
+  makeOption("No protein/VEG", 0, "protein"),
   makeOption("Extra protein", 2, "extras"),
   makeOption("Extra veggies", 2, "extras"),
 ];
@@ -39,6 +42,8 @@ const data = {
     makeItem("crab RANGOON", 8.95),
     makeItem("fresh ROLL", 3, [
       makeOption("SHRIMP CHICKEN", 0, "protein"),
+      makeOption("Chicken", 0, "protein"),
+      makeOption("Shrimp", 1, "protein"),
       makeOption("TOFU", 0, "protein"),
     ]),
     makeItem("thai spring ROLLS", 6.95, [
@@ -63,23 +68,48 @@ const data = {
   soup: [
     makeItem("TOM YUM", 10.95, [
       makeOption("chicken", 0, "protein"),
-      makeOption("shrimp", 0, "protein"),
+      makeOption("shrimp", 1, "protein"),
+      makeOption("WR", 0, "rice"),
+      makeOption("BR", 1, "rice"),
+      makeOption("No rice", 0, "rice"),
       makeOption("bowl", 0, "size"),
       makeOption("firepot", 4, "size"),
     ]),
     makeItem("tom KA KAI", 11.95, [
+      makeOption("Chicken", 0, "protein"),
+      makeOption("Pork", 0, "protein"),
+      makeOption("Tofu", 0, "protein"),
+      makeOption("TEmpeh", 1, "protein"),
+      makeOption("Beef", 1, "protein"),
+      makeOption("Shrimp", 1, "protein"),
+      makeOption("No protein/VEG", 0, "protein"),
+      makeOption("WR", 0, "rice"),
+      makeOption("BR", 1, "rice"),
+      makeOption("No rice", 0, "rice"),
+      makeOption("Extra protein", 2, "extras"),
+      makeOption("Extra veggies", 2, "extras"),
       makeOption("bowl", 0, "size"),
       makeOption("firepot", 4, "size"),
     ]),
     makeItem("SEAFOOD COMBO soup", 12.95, [
+      makeOption("WR", 0, "rice"),
+      makeOption("BR", 1, "rice"),
+      makeOption("No rice", 0, "rice"),
       makeOption("bowl", 0, "size"),
       makeOption("firepot", 3, "size"),
     ]),
     makeItem("TOM KA TALAY", 13.95, [
+      makeOption("WR", 0, "rice"),
+      makeOption("BR", 1, "rice"),
+      makeOption("No rice", 0, "rice"),
       makeOption("bowl", 0, "size"),
       makeOption("firepot", 3, "size"),
     ]),
-    makeItem("Bean Thread SOUP", 11.95),
+    makeItem("Bean Thread SOUP", 11.95, [
+      makeOption("WR", 0, "rice"),
+      makeOption("BR", 1, "rice"),
+      makeOption("No rice", 0, "rice"),
+    ]),
     makeItem("WONTON soup", 11.95),
   ],
   entree: [
@@ -120,8 +150,10 @@ const data = {
       makeOption("TEmpeh", -3, "protein"),
       makeOption("Beef", -3, "protein"),
       makeOption("Shrimp", -3, "protein"),
+      makeOption("No protein/VEG", 0, "protein"),
       makeOption("WR", 0, "rice"),
       makeOption("BR", 1, "rice"),
+      makeOption("No rice", 0, "rice"),
       makeOption("Extra protein", 2, "extras"),
       makeOption("Extra veggies", 2, "extras"),
     ]),
