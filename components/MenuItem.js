@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import * as yup from "yup";
 import IconButton from "@material-ui/core/IconButton";
-import { useFormik } from "formik";
+import { Field, useFormik } from "formik";
 import { FormHelperText } from "@material-ui/core";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -14,14 +14,12 @@ import { useContext } from "react";
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import NotesIcon from "@material-ui/icons/Notes";
-import NotInterestedIcon from "@material-ui/icons/NotInterested";
 import {
   Button,
   DialogActions,
   DialogTitle,
   DialogContent,
 } from "@material-ui/core";
-import data from "../utils/data";
 import theme from "../pages/theme";
 
 const useStyles = makeStyles(() => ({
@@ -124,63 +122,64 @@ const MenuItem = (props) => {
 
   const validationSchema = yup.object(rawSchema);
 
-  const formik = useFormik({
-    initialValues: {
-      protein: "",
-      rice: "",
-      extras: [],
-      notes: "",
-      stars: 0,
-    },
-    validationSchema,
-    validateOnBlur: false,
-    validateOnChange: false,
+  const { values, errors, touched, setFieldValue, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        protein: "",
+        rice: "",
+        extras: [],
+        notes: "",
+        stars: 0,
+      },
+      validationSchema,
+      validateOnBlur: false,
+      validateOnChange: false,
 
-    onSubmit: async (values) => {
-      const { protein, rice, extras = [], notes, stars } = values;
+      onSubmit: async (values) => {
+        const { protein, rice, extras = [], notes, stars } = values;
 
-      let ricePrice = 0;
-      if (rice.length > 0) {
-        ricePrice = flattenedOptions.find(
-          (item) => item.name === rice
-        ).modifier;
-      }
-      let proteinPrice = 0;
-      if (protein.length > 0) {
-        proteinPrice = flattenedOptions.find(
-          (item) => item.name === protein
-        ).modifier;
-      }
+        let ricePrice = 0;
+        if (rice.length > 0) {
+          ricePrice = flattenedOptions.find(
+            (item) => item.name === rice
+          ).modifier;
+        }
+        let proteinPrice = 0;
+        if (protein.length > 0) {
+          proteinPrice = flattenedOptions.find(
+            (item) => item.name === protein
+          ).modifier;
+        }
 
-      let extraPrice = extras.reduce(
-        (acc, extra) =>
-          (acc += flattenedOptions.find(
-            (item) => item.name === extra
-          ).modifier),
-        0
-      );
+        let extraPrice = extras.reduce(
+          (acc, extra) =>
+            (acc += flattenedOptions.find(
+              (item) => item.name === extra
+            ).modifier),
+          0
+        );
 
-      const itemPrice = price + ricePrice + proteinPrice + extraPrice;
+        const itemPrice = price + ricePrice + proteinPrice + extraPrice;
 
-      const cartItem = {
-        name,
-        category,
-        protein,
-        rice,
-        extras,
-        notes,
-        stars,
-        itemPrice,
-        time,
-      };
+        const cartItem = {
+          name,
+          category,
+          protein,
+          rice,
+          extras,
+          notes,
+          stars,
+          itemPrice,
+          time,
+        };
 
-      addItem(cartItem);
-      handleClose();
-    },
-  });
+        addItem(cartItem);
+        handleClose();
+      },
+    });
 
   const handleStarsChanged = (starCount) => {
-    formik.setFieldValue("stars", starCount);
+    setFieldValue("stars", starCount);
   };
 
   return (
@@ -188,7 +187,7 @@ const MenuItem = (props) => {
       <Dialog
         open={open}
         onClose={handleClose}
-        style={{ margin: "auto auto", width: 550 }}
+        style={{ margin: "auto", width: 550 }}
       >
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <DialogTitle>{name}</DialogTitle>
@@ -196,7 +195,7 @@ const MenuItem = (props) => {
             <NotesIcon />
           </IconButton>
         </div>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <DialogContent>
             {notes ? (
               <FormControl>
@@ -206,20 +205,20 @@ const MenuItem = (props) => {
                   id="notes"
                   name="notes"
                   placeholder="add notes"
-                  value={formik.values.notes}
-                  onChange={formik.handleChange}
+                  value={values.notes}
+                  onChange={handleChange}
                 />
               </FormControl>
             ) : null}
             {groupedOptions.protein ? (
-              <FormControl error={!!formik.errors.protein}>
-                {formik.errors.protein ? (
-                  <FormHelperText>{formik.errors.protein}</FormHelperText>
+              <FormControl error={!!errors.protein}>
+                {errors.protein ? (
+                  <FormHelperText>{errors.protein}</FormHelperText>
                 ) : null}
                 <RadioGroup
                   className={classes.proteins}
 
-                  // touched={formik.touched.protein}
+                  // touched={touched.protein}
                 >
                   {groupedOptions.protein.map((option, index) => (
                     <FormControlLabel
@@ -228,7 +227,7 @@ const MenuItem = (props) => {
                       control={<Radio />}
                       label={option.name}
                       name="protein"
-                      onChange={formik.handleChange}
+                      onChange={handleChange}
                     />
                   ))}
                 </RadioGroup>
@@ -237,9 +236,9 @@ const MenuItem = (props) => {
 
             <div style={{ display: "flex", flexDirection: "column" }}>
               {groupedOptions.rice ? (
-                <FormControl error={!!formik.errors.rice}>
-                  {formik.errors.rice ? (
-                    <FormHelperText>{formik.errors.rice}</FormHelperText>
+                <FormControl error={!!errors.rice}>
+                  {errors.rice ? (
+                    <FormHelperText>{errors.rice}</FormHelperText>
                   ) : null}
                   <RadioGroup
                     className={classes.rice}
@@ -256,7 +255,7 @@ const MenuItem = (props) => {
                         control={<Radio />}
                         label={option.name}
                         name="rice"
-                        onChange={formik.handleChange}
+                        onChange={handleChange}
                       />
                     ))}
                   </RadioGroup>
@@ -279,7 +278,19 @@ const MenuItem = (props) => {
                         value={option.name}
                         label={option.name}
                         name="extras"
-                        onClick={formik.handleChange}
+                        onClick={() => {
+                          if (values.extras.includes(option.name)) {
+                            setFieldValue(
+                              "extras",
+                              values.extras.filter((n) => n !== option.name)
+                            );
+                          } else {
+                            setFieldValue("extras", [
+                              ...values.extras,
+                              option.name,
+                            ]);
+                          }
+                        }}
                       />
                     ))}
                   </FormGroup>
@@ -302,7 +313,7 @@ const MenuItem = (props) => {
                       key={count}
                       onClick={() => handleStarsChanged(count)}
                     >
-                      {count <= formik.values.stars ? (
+                      {count <= values.stars ? (
                         <StarIcon style={{ color: "#ffc500" }} />
                       ) : (
                         <StarBorderIcon style={{ color: "#ffc500" }} />
@@ -318,11 +329,11 @@ const MenuItem = (props) => {
                   </IconButton> */}
               </div>
 
-              {/* {formik.errors.stars ? (
-                  <FormHelperText>{formik.errors.stars}</FormHelperText>
+              {/* {errors.stars ? (
+                  <FormHelperText>{errors.stars}</FormHelperText>
                 ) : null} */}
               {/* </FormControl> */}
-              <Button onClick={formik.handleSubmit} className={classes.chip}>
+              <Button onClick={handleSubmit} className={classes.chip}>
                 Add to cart
               </Button>
             </>
