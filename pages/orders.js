@@ -2,6 +2,7 @@ import { Button, makeStyles } from "@material-ui/core";
 import { useEffect, useContext, useState } from "react";
 import Order from "../components/order";
 import CartContext from "../utils/cart-context";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -14,8 +15,20 @@ const useStyles = makeStyles((theme) => ({
 const Orders = () => {
   const { orders, fetchOrders } = useContext(CartContext);
   const classes = useStyles();
+  const router = useRouter();
 
   const addToArchive = async () => {
+    let deleteData = await fetch(
+      "https://thai-calculator-default-rtdb.firebaseio.com/recentOrders.json",
+      {
+        method: "DELETE",
+        body: JSON.stringify(orders.map((order) => order.id)),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     let response = await fetch(
       "https://thai-calculator-default-rtdb.firebaseio.com/archivedOrders.json",
       {
@@ -28,10 +41,10 @@ const Orders = () => {
         },
       }
     );
+    router.push("/");
   };
 
   const sortedOrders = orders.sort((a, b) => {
-    console.log(a.time);
     return b.time - a.time;
   });
 

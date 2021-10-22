@@ -6,6 +6,29 @@ import { useEffect } from "react";
 import { SearchContextProvider } from "../utils/search-context";
 import theme from "./theme";
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyA1oL-kZSAuizXIH5lCiGMJmxBqJ26ZMAk",
+  authDomain: "thai-calculator.firebaseapp.com",
+  databaseURL: "https://thai-calculator-default-rtdb.firebaseio.com",
+  projectId: "thai-calculator",
+  storageBucket: "thai-calculator.appspot.com",
+  messagingSenderId: "1031090262907",
+  appId: "1:1031090262907:web:7c4a5b38650205fc0ee3de",
+  measurementId: "G-9ZKH40PXLV",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");

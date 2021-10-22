@@ -16,7 +16,7 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import SearchIcon from "@material-ui/icons/Search";
 // import InputBase from "@material-ui/core/InputBase";
-import data from "../utils/data";
+import { categories } from "../utils/data";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchContext from "../utils/search-context";
@@ -153,7 +153,7 @@ const MainNavigation = () => {
                 "aria-labelledby": "basic-button",
               }}
             >
-              {Object.entries(data).map(([category]) => (
+              {categories.map((category) => (
                 <Link href={"/" + category} key={category}>
                   <MenuItem onClick={handleClose}>{category}</MenuItem>
                 </Link>

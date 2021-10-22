@@ -1,7 +1,8 @@
-const makeItem = (name, price, field, options = []) => ({
+const makeItem = (name, price, options = [], time = null) => ({
   name,
   price,
   options,
+  time,
 });
 
 const makeOption = (name, modifier, type) => ({
@@ -18,11 +19,11 @@ const entreeCurryOptions = [
   makeOption("Beef", 1, "protein"),
   makeOption("Shrimp", 1, "protein"),
   makeOption("No protein/VEG", 0, "protein"),
-  makeOption("WR", 0, "rice"),
-  makeOption("BR", 1, "rice"),
+  makeOption("White", 0, "rice"),
+  makeOption("Brown", 1, "rice"),
   makeOption("No rice", 0, "rice"),
-  makeOption("Extra protein", 2, "extras"),
-  makeOption("Extra veggies", 2, "extras"),
+  makeOption("PxP", 2, "extras"),
+  makeOption("VxV", 2, "extras"),
 ];
 
 const noodleFrOptions = [
@@ -33,19 +34,27 @@ const noodleFrOptions = [
   makeOption("Beef", 1, "protein"),
   makeOption("Shrimp", 1, "protein"),
   makeOption("No protein/VEG", 0, "protein"),
-  makeOption("Extra protein", 2, "extras"),
-  makeOption("Extra veggies", 2, "extras"),
+  makeOption("PxP", 2, "extras"),
+  makeOption("VxV", 2, "extras"),
 ];
 
-const data = {
+export const data = {
   appetizers: [
     makeItem("crab RANGOON", 8.95),
-    makeItem("fresh ROLL", 3, [
-      makeOption("SHRIMP CHICKEN", 0, "protein"),
-      makeOption("Chicken", 0, "protein"),
-      makeOption("Shrimp", 1, "protein"),
-      makeOption("TOFU", 0, "protein"),
-    ]),
+    makeItem(
+      "fresh ROLL",
+      3,
+      [
+        makeOption("C/S", 0, "protein"),
+        makeOption("Chicken", 0, "protein"),
+        makeOption("Shrimp", 1, "protein"),
+        makeOption("Tofu", 0, "protein"),
+        makeOption("No protein/VEG", 0, "protein"),
+        makeOption("PxP", 2, "extras"),
+        makeOption("VxV", 2, "extras"),
+      ],
+      0
+    ),
     makeItem("thai spring ROLLS", 6.95, [
       makeOption("VEGGIE", 0, "protein"),
       makeOption("MEAT", 0, "protein"),
@@ -53,25 +62,45 @@ const data = {
     makeItem("SATAY chicken", 9.95),
     makeItem("bangkok CREPE", 11.95),
     makeItem("kahlee PUFFS", 9.95),
-    makeItem("vegetarian PLEASER/ fried tofu", 8.95),
+    makeItem("vegetarian PLEASER", 8.95),
   ],
-  salad: [
-    makeItem("Beef or Pork SALAD", 12.95, [
+  salads: [
+    makeItem("Beef/Pork SALAD", 12.95, [
       makeOption("Beef", 0, "protein"),
       makeOption("Pork", 0, "protein"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
     ]),
-    makeItem("spicy chicken salad SALAD C", 11.95),
-    makeItem("Bean Thread Salad", 11.5),
-    makeItem("SQuid SALAD", 12.95),
-    makeItem("SEAFOOD SALAD", 12.95),
+    makeItem("spicy Chicken SALAD", 11.95, [
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
+    ]),
+    makeItem("Bean Thread Salad", 11.5, [
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
+    ]),
+    makeItem("SQuid SALAD", 12.95, [
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
+    ]),
+    makeItem("SEAFOOD SALAD", 12.95, [
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
+    ]),
   ],
-  soup: [
+  soups: [
     makeItem("TOM YUM", 10.95, [
-      makeOption("chicken", 0, "protein"),
-      makeOption("shrimp", 1, "protein"),
-      makeOption("WR", 0, "rice"),
-      makeOption("BR", 1, "rice"),
+      makeOption("Chicken", 0, "protein"),
+      makeOption("Pork", 0, "protein"),
+      makeOption("Tofu", 0, "protein"),
+      makeOption("TEmpeh", 1, "protein"),
+      makeOption("Beef", 1, "protein"),
+      makeOption("Shrimp", 1, "protein"),
+      makeOption("White", 0, "rice"),
+      makeOption("Brown", 1, "rice"),
       makeOption("No rice", 0, "rice"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
       makeOption("bowl", 0, "size"),
       makeOption("firepot", 4, "size"),
     ]),
@@ -83,36 +112,42 @@ const data = {
       makeOption("Beef", 1, "protein"),
       makeOption("Shrimp", 1, "protein"),
       makeOption("No protein/VEG", 0, "protein"),
-      makeOption("WR", 0, "rice"),
-      makeOption("BR", 1, "rice"),
+      makeOption("White", 0, "rice"),
+      makeOption("Brown", 1, "rice"),
       makeOption("No rice", 0, "rice"),
-      makeOption("Extra protein", 2, "extras"),
-      makeOption("Extra veggies", 2, "extras"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
       makeOption("bowl", 0, "size"),
       makeOption("firepot", 4, "size"),
     ]),
     makeItem("SEAFOOD COMBO soup", 12.95, [
-      makeOption("WR", 0, "rice"),
-      makeOption("BR", 1, "rice"),
+      makeOption("White", 0, "rice"),
+      makeOption("Brown", 1, "rice"),
       makeOption("No rice", 0, "rice"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
       makeOption("bowl", 0, "size"),
       makeOption("firepot", 3, "size"),
     ]),
     makeItem("TOM KA TALAY", 13.95, [
-      makeOption("WR", 0, "rice"),
-      makeOption("BR", 1, "rice"),
+      makeOption("White", 0, "rice"),
+      makeOption("Brown", 1, "rice"),
       makeOption("No rice", 0, "rice"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
       makeOption("bowl", 0, "size"),
       makeOption("firepot", 3, "size"),
     ]),
     makeItem("Bean Thread SOUP", 11.95, [
-      makeOption("WR", 0, "rice"),
-      makeOption("BR", 1, "rice"),
-      makeOption("No rice", 0, "rice"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
     ]),
-    makeItem("WONTON soup", 11.95),
+    makeItem("WONTON soup", 11.95, [
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
+    ]),
   ],
-  entree: [
+  entrees: [
     makeItem("pad KA-PRAO", 11.95, entreeCurryOptions),
     makeItem("pad PRIK KHING", 11.95, entreeCurryOptions),
     makeItem("spicy EGGPLANT", 11.95, entreeCurryOptions),
@@ -125,20 +160,22 @@ const data = {
     makeItem("GARLIC C/P", 12.95, [
       makeOption("chicken", 0, "protein"),
       makeOption("pork", 0, "protein"),
-      makeOption("WR", 0, "rice"),
-      makeOption("BR", 1, "rice"),
-      makeOption("extra protein", 2, "extras"),
-      makeOption("extra veggies", 2, "extras"),
+      makeOption("White", 0, "rice"),
+      makeOption("Brown", 1, "rice"),
+      makeOption("No rice", 0, "rice"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
     ]),
     makeItem("Ginger stir fry", 11.95, entreeCurryOptions),
     makeItem("meat with BROCColi", 11.95, entreeCurryOptions),
     makeItem("THAI Sweet + Sour", 11.95, entreeCurryOptions),
-    makeItem("fresh ORANGE pineapple chicken", 12.95, entreeCurryOptions),
+    makeItem("ORANGE pineapple Chicken", 12.95, entreeCurryOptions),
     makeItem("STIR FRIED beef", 12.95, [
-      makeOption("WR", 0, "rice"),
-      makeOption("BR", 1, "rice"),
-      makeOption("extra protein", 2, "extras"),
-      makeOption("extra veggies", 2, "extras"),
+      makeOption("White", 0, "rice"),
+      makeOption("Brown", 1, "rice"),
+      makeOption("No rice", 0, "rice"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
     ]),
   ],
   curries: [
@@ -151,11 +188,11 @@ const data = {
       makeOption("Beef", -3, "protein"),
       makeOption("Shrimp", -3, "protein"),
       makeOption("No protein/VEG", 0, "protein"),
-      makeOption("WR", 0, "rice"),
-      makeOption("BR", 1, "rice"),
+      makeOption("White", 0, "rice"),
+      makeOption("Brown", 1, "rice"),
       makeOption("No rice", 0, "rice"),
-      makeOption("Extra protein", 2, "extras"),
-      makeOption("Extra veggies", 2, "extras"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
     ]),
     makeItem("the EVERGREEN state curry", 13.95, entreeCurryOptions),
     makeItem("naughty jungle PRINCESS", 12.95, entreeCurryOptions),
@@ -169,17 +206,29 @@ const data = {
   seafood: [
     makeItem("honey walnut PRAWNS", 15.95),
     makeItem("PAD TALAY", 15.95),
-    makeItem("Shrimp in a CLAY POT", 12.95),
+    makeItem("Shrimp in a CLAY POT", 12.95, [], 15),
     makeItem("SPICY SHRIMP", 12.95),
     makeItem("SPICY SQuid", 12.95),
   ],
-  noodle: [
+  noodles: [
     makeItem("East meets West NOODLES", 13.95, noodleFrOptions),
     makeItem("PAD THAI", 11.95, noodleFrOptions),
-    makeItem("BANGKOK Pad SEE iew", 11.95, noodleFrOptions),
-    makeItem("Chili Basil Noodles /pad kee mao", 11.95, noodleFrOptions),
+    makeItem("BANGKOK/pad SEE EW", 11.95, noodleFrOptions),
+    makeItem("CBN/pad kee mao", 11.95, noodleFrOptions),
     makeItem("RAINBOW noodles", 12.95, noodleFrOptions),
-    makeItem("KAO SOI noodles", 11.95, noodleFrOptions),
+    makeItem("KAO SOI noodles", 11.95, [
+      makeOption("Chicken", -4, "protein"),
+      makeOption("Pork", -4, "protein"),
+      makeOption("Tofu", -4, "protein"),
+      makeOption("TEmpeh", -3, "protein"),
+      makeOption("Beef", -3, "protein"),
+      makeOption("Shrimp", -3, "protein"),
+      makeOption("No protein/VEG", 0, "protein"),
+      makeOption("White", 1, "extras"),
+      makeOption("Brown", 2, "extras"),
+      makeOption("PxP", 2, "extras"),
+      makeOption("VxV", 2, "extras"),
+    ]),
     makeItem("MIXED MEATS and bean thread", 13.95),
   ],
   FRice: [
@@ -208,5 +257,39 @@ const data = {
   ],
 };
 
-module.exports = data;
-// export default data;
+export const categories = Object.keys(data);
+
+const categoriesTime = {
+  appetizers: 10,
+  salads: 10,
+  soups: 10,
+  entrees: 8,
+  curries: 10,
+  seafood: 10,
+  noodles: 7,
+  FRice: 7,
+  sides: 0,
+  desserts: 5,
+  drinks: 0,
+};
+
+const mutatedData = Object.entries(data).map((arr) => {
+  const type = arr[0];
+  return arr[1].map((item) => {
+    if (item.time !== null) {
+      return { ...item, category: type };
+    }
+
+    return { ...item, category: type, time: categoriesTime[type] };
+  });
+});
+
+// const flattenedData = mutatedData.reduce(
+//   (acc, nested) => [...acc, ...nested],
+//   []
+// );
+
+let flattenedData = [];
+mutatedData.map((arr) => arr.map((item) => flattenedData.push(item)));
+
+export default flattenedData;

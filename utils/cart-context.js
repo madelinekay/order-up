@@ -37,50 +37,146 @@ export const CartContextProvider = (props) => {
 
       setOrders(orders);
     }
-
-    console.log("fetch orders", orders);
   };
 
-  const getTime = (cartTime) => {
+  const getTime = () => {
+    const ordersDict = cart.reduce((acc, item) => {
+      if (item.time == 0) {
+        return acc;
+      }
+      if (acc[item.time] >= 1) {
+        acc[item.time]++;
+        return acc;
+      }
+      acc[item.time] = 1;
+      return acc;
+    }, {});
+
+    let remainders = [];
+    const evenCartTime = Object.keys(ordersDict).reduce((acc, key) => {
+      if (ordersDict[key] % 2 == 0) {
+        return (acc += (ordersDict[key] / 2) * +key * 60000);
+      }
+
+      acc += Math.floor(ordersDict[key] / 2) * +key * 60000;
+      remainders.push(+key);
+      return acc;
+    }, 0);
+
     const ongoingOrders = orders.reduce((acc, order) => {
       if (order.status === "ongoing") {
         return acc.concat(order);
       }
       return acc;
     }, []);
-    console.log("ongoingorders", ongoingOrders);
+
+    // const remaindersTime = remainders
+    //   .sort()
+    //   .filter((_, index) => index % 2 === 0)
+    //   .reduce((time, remainder) => {
+    //       for (let i = 0; i < remainders.length; i += 2) {
+    //         if (remainders[i + 1]) {
+    //           return time += remainders[i] * 60000;
+    //         }
+    //         orderRemainderTime = remainders[i] * 60000;
+    //         return time += remainders[i] * 60000;
+    //       }
+    //       return time;
+
+    //   }, 0);
+
+    //bring back the final remainder time, needs to be in the database for function to work
+    remainders.sort();
+    let remaindersTime = 0;
+    let finalRemainderTime = null;
+    let timeOff = 0;
+    const calculateRemaindersTime = async () => {
+      for (let i = 0; i < remainders.length; i += 2) {
+        if (remainders[i + 1]) {
+          console.log("i", i);
+          console.log("remainders[i]", remainders[i]);
+          remaindersTime += remainders[i] * 60000;
+        } else if (!remainders[i + 1] && ongoingOrders.length > 0) {
+          for (let order of ongoingOrders) {
+            //also should loop backwards so orders closer together are handled first
+            if (order.finalRemainderTime) {
+              console.log(
+                "order.finalRemainderTime",
+                order.finalRemainderTime,
+                order
+              );
+              timeOff = remainders[i] * 60000 - order.finalRemainderTime;
+
+              let patched = await fetch(
+                `https://thai-calculator-default-rtdb.firebaseio.com/recentOrders/${order.id}.json`,
+                {
+                  method: "PATCH",
+                  body: JSON.stringify({ finalRemainderTime: undefined }),
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+              console.log("patched", patched);
+              if (timeOff < 0) {
+                console.log("timeOff <0");
+                timeOff = 0;
+              }
+              remaindersTime + timeOff;
+            }
+          }
+        } else {
+          finalRemainderTime = remainders[i] * 60000;
+          console.log("finalRemainderTime", finalRemainderTime);
+          remaindersTime += finalRemainderTime;
+        }
+      }
+    };
+    calculateRemaindersTime();
+
+    const cartTime = evenCartTime + remaindersTime;
+    // + remaindersTime() + orderRemainderTime;
 
     const ongoingOrdersTime = ongoingOrders.reduce((acc, order) => {
-      if (order == ongoingOrders[0]) {
-        // check if this comparison is kosher
-        return (acc += order.timeReadyMilliseconds - Date.now());
+      if (order.id == ongoingOrders[ongoingOrders.length - 1].id) {
+        console.log("order", order);
+        // check if this comparison is kosher, check that ongoing orders 0 is the newest order
+        let ongoingOrderTime = order.timeReadyMilliseconds - Date.now();
+        if (ongoingOrderTime < 0) {
+          ongoingOrderTime = 0;
+        }
+        return (acc += ongoingOrderTime);
       }
       return acc + order.cartTime;
     }, 0);
-    console.log("ongoing time", ongoingOrdersTime);
+
     const totalTime = cartTime + ongoingOrdersTime;
-    console.log("total time", totalTime);
-    return totalTime;
+
+    console.log("ordersDict", ordersDict);
+    console.log("evenCartTime", evenCartTime);
+    console.log("remainders", remainders);
+    console.log("remaindersTime", remaindersTime);
+    console.log("finalRemainderTime", finalRemainderTime);
+    console.log("ongoingOrdersTime", ongoingOrdersTime);
+    console.log("cartTime", cartTime);
+    console.log("totalTime", totalTime);
+
+    // return { totalTime, orderRemainderTime };
+    return { totalTime, cartTime, finalRemainderTime };
   };
 
   const addItem = (item) => {
-    console.log(item);
-    console.log("addItem");
     setCart((state) => [...state, item]);
     setTotal((prevState) => (prevState += item.itemPrice));
   };
 
   const addToOrders = async (name) => {
-    // const timeReadyMilliseconds = getTime();
-    const cartTime = cart.reduce((acc, item) => {
-      if (item.name.includes("clay")) {
-        return (acc += 10 * 60000);
-      }
-      return (acc += 5 * 60000);
-    }, 0);
-    const timeReadyMilliseconds = getTime(cartTime) + Date.now();
+    // const { totalTime, orderRemainderTime } = getTime();
+    const { totalTime, cartTime, finalRemainderTime } = getTime();
+
+    const timeReadyMilliseconds = totalTime + Date.now();
     const timeReady = new Date(timeReadyMilliseconds).toLocaleTimeString();
-    // console.log("timeReady", timeReady);
+
     const taxTotal = total * 0.065 + total;
     let response = await fetch(
       "https://thai-calculator-default-rtdb.firebaseio.com/recentOrders.json",
@@ -92,13 +188,14 @@ export const CartContextProvider = (props) => {
             ([], { hour: "2-digit", minute: "2-digit" })
           ),
           time: Date.now(),
-          cartTime,
           timeReady,
           timeReadyMilliseconds,
           total,
           taxTotal,
           name,
           status: "ongoing",
+          cartTime,
+          finalRemainderTime,
         }),
         headers: {
           "Content-Type": "application/json",

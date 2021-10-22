@@ -41,8 +41,6 @@ const Cart = () => {
   const { cart, total, addToOrders } = useContext(CartContext);
   const classes = useStyles();
 
-  console.log(cart);
-
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
 

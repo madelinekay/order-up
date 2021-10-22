@@ -86,7 +86,7 @@ const useStyles = makeStyles(() => ({
 
 const MenuItem = (props) => {
   const [notes, setNotes] = useState();
-  const { options = [], name, price } = props.item;
+  const { options = [], name, price, category, time } = props.item;
   const classes = useStyles();
   const { addItem } = useContext(CartContext);
   const [open, setOpen] = useState(false);
@@ -99,15 +99,6 @@ const MenuItem = (props) => {
     setOpen(false);
   };
 
-  const category = useMemo(() => {
-    return (
-      props.category ||
-      Object.keys(data).find((cat) =>
-        data[cat].find((item) => item.name === name)
-      )
-    );
-  }, [props.category, name]);
-
   const groupedOptions = options.reduce((acc, option) => {
     return {
       ...acc,
@@ -119,9 +110,6 @@ const MenuItem = (props) => {
     (acc, nested) => [...acc, ...nested],
     []
   );
-  const handleStars = (event) => {
-    console.log("handle stars", event);
-  };
 
   let rawSchema = {};
 
@@ -176,20 +164,20 @@ const MenuItem = (props) => {
 
       const cartItem = {
         name,
+        category,
         protein,
         rice,
         extras,
         notes,
         stars,
         itemPrice,
+        time,
       };
 
       addItem(cartItem);
       handleClose();
     },
   });
-
-  console.log("errors", formik.errors);
 
   const handleStarsChanged = (starCount) => {
     formik.setFieldValue("stars", starCount);
@@ -258,7 +246,7 @@ const MenuItem = (props) => {
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      columnGap: 42,
+                      columnGap: 26,
                     }}
                   >
                     {groupedOptions.rice.map((option, index) => (
@@ -281,7 +269,7 @@ const MenuItem = (props) => {
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      columnGap: 42,
+                      columnGap: 38,
                     }}
                   >
                     {groupedOptions.extras.map((option, index) => (

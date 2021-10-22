@@ -9,11 +9,6 @@ const SearchContext = createContext({
   search: (e) => {},
 });
 
-const flattenedData = Object.values(data).reduce(
-  (acc, nested) => [...acc, ...nested],
-  []
-);
-
 export const SearchContextProvider = (props) => {
   const [filteredMenu, setFilteredMenu] = useState([]);
   const router = useRouter();
@@ -22,15 +17,11 @@ export const SearchContextProvider = (props) => {
 
   const performSearch = (e) => {
     const value = e.target.value;
-    console.log("search value", value);
-    // setSearchQuery(value);
     router.push("/?q=" + value);
   };
-  console.log("SearchContextProvider");
 
   useEffect(() => {
-    console.log("useEffect");
-    const searchResults = flattenedData.reduce((acc, item) => {
+    const searchResults = data.reduce((acc, item) => {
       if (item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
         acc.push(item);
       }
