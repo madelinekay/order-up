@@ -1,5 +1,6 @@
 import { useState, createContext, useEffect } from "react";
 import { useRouter } from "next/router";
+import { getDatabase, ref, setTotal } from "firebase/database";
 
 const CartContext = createContext({
   cart: [],
@@ -171,37 +172,65 @@ export const CartContextProvider = (props) => {
   };
 
   const addToOrders = async (name) => {
-    // const { totalTime, orderRemainderTime } = getTime();
+    const database = getDatabase();
+
     const { totalTime, cartTime, finalRemainderTime } = getTime();
 
     const timeReadyMilliseconds = totalTime + Date.now();
     const timeReady = new Date(timeReadyMilliseconds).toLocaleTimeString();
 
     const taxTotal = total * 0.065 + total;
-    let response = await fetch(
-      "https://thai-calculator-default-rtdb.firebaseio.com/recentOrders.json",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          items: cart,
-          timePlaced: new Date().toLocaleTimeString(
-            ([], { hour: "2-digit", minute: "2-digit" })
-          ),
-          time: Date.now(),
-          timeReady,
-          timeReadyMilliseconds,
-          total,
-          taxTotal,
-          name,
-          status: "ongoing",
-          cartTime,
-          finalRemainderTime,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+
+    set(ref(db, "orders"), {
+      items: cart,
+      timePlaced: new Date().toLocaleTimeString(
+        ([], { hour: "2-digit", minute: "2-digit" })
+      ),
+      time: Date.now(),
+      timeReady,
+      timeReadyMilliseconds,
+      total,
+      taxTotal,
+      name,
+      status: "ongoing",
+      cartTime,
+      finalRemainderTime,
+    });
+
+    const ordersRef = ref(database, "/orders");
+
+    //
+
+    // const { totalTime, cartTime, finalRemainderTime } = getTime();
+
+    // const timeReadyMilliseconds = totalTime + Date.now();
+    // const timeReady = new Date(timeReadyMilliseconds).toLocaleTimeString();
+
+    // const taxTotal = total * 0.065 + total;
+    // let response = await fetch(
+    //   "https://thai-calculator-default-rtdb.firebaseio.com/recentOrders.json",
+    //   {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       items: cart,
+    //       timePlaced: new Date().toLocaleTimeString(
+    //         ([], { hour: "2-digit", minute: "2-digit" })
+    //       ),
+    //       time: Date.now(),
+    //       timeReady,
+    //       timeReadyMilliseconds,
+    //       total,
+    //       taxTotal,
+    //       name,
+    //       status: "ongoing",
+    //       cartTime,
+    //       finalRemainderTime,
+    //     }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
 
     fetchOrders();
     router.push("/orders");

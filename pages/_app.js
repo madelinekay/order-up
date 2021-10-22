@@ -9,6 +9,8 @@ import theme from "./theme";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, onValue } from "firebase/database";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,16 +27,24 @@ const firebaseConfig = {
   measurementId: "G-9ZKH40PXLV",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
+  }, []);
+
+  // Initialize Firebase
+  useEffect(() => {
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+    const ordersRef = ref(database, "recentOrders");
+    onValue(ordersRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log("data", data);
+    });
   }, []);
 
   return (
