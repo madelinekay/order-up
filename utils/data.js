@@ -169,7 +169,7 @@ export const data = {
     makeItem("Ginger stir fry", 11.95, entreeCurryOptions),
     makeItem("meat with BROCColi", 11.95, entreeCurryOptions),
     makeItem("THAI Sweet + Sour", 11.95, entreeCurryOptions),
-    makeItem("ORANGE pineapple Chicken", 12.95, entreeCurryOptions),
+    makeItem("ORANGE pineapple Chicken", 12.95, entreeCurryOptions, 15),
     makeItem("STIR FRIED beef", 12.95, [
       makeOption("White", 0, "rice"),
       makeOption("Brown", 1, "rice"),
@@ -181,6 +181,7 @@ export const data = {
   curries: [
     makeItem("tropical JADE", 15.95, entreeCurryOptions),
     makeItem("Yellow curry with fish", 15.95, [
+      makeOption("Fish", 0, "protein"),
       makeOption("Chicken", -4, "protein"),
       makeOption("Pork", -4, "protein"),
       makeOption("Tofu", -4, "protein"),
@@ -204,7 +205,7 @@ export const data = {
     makeItem("chinese PUMPKIN CURRY", 11.95, entreeCurryOptions),
   ],
   seafood: [
-    makeItem("honey walnut PRAWNS", 15.95),
+    makeItem("honey walnut PRAWNS", 15.95, 15),
     makeItem("PAD TALAY", 15.95),
     makeItem("Shrimp in a CLAY POT", 12.95, [], 15),
     makeItem("SPICY SHRIMP", 12.95),

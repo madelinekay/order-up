@@ -31,9 +31,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Order = (props) => {
   const classes = useStyles();
-  const { items, name, timePlaced, total, id, status, timeReady, taxTotal } =
-    props.order;
-  const { markOrderComplete } = useContext(CartContext);
+  const { items, name, timePlaced, total, id, status, timeReady } = props.order;
+  const { markOrderComplete, deleteOrder } = useContext(CartContext);
+  console.log("total", total);
+
+  const tax = total * 0.065;
+  const totalPlusTax = (tax + +total).toFixed(2);
 
   return (
     <Card
@@ -86,7 +89,7 @@ const Order = (props) => {
           }}
         >
           <div>Tax:</div>
-          <div>{(taxTotal - total).toFixed(2)}</div>
+          <div>{tax.toFixed(2)}</div>
         </div>
         <div
           style={{
@@ -97,7 +100,7 @@ const Order = (props) => {
           }}
         >
           <div>Total:</div>
-          <div>{taxTotal.toFixed(2)}</div>
+          <div>{totalPlusTax}</div>
         </div>
       </CardContent>
       <div>
@@ -121,7 +124,7 @@ const Order = (props) => {
           </div>
         )}
 
-        <IconButton className={classes.icons}>
+        <IconButton className={classes.icons} onClick={() => deleteOrder(id)}>
           <DeleteIcon />
         </IconButton>
       </div>
