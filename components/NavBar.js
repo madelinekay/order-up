@@ -95,7 +95,9 @@ const MainNavigation = () => {
   return (
     <AppBar position="sticky" className={classes.appbar}>
       <Toolbar className={classes.toolbar}>
-        <div className={classes.title}> Order Up | Thai Pavillion</div>
+        <Link href="/">
+          <div className={classes.title}> Order Up | Thai Pavillion</div>
+        </Link>
         <div className={classes.search}>
           <TextField
             placeholder="Search…"

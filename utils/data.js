@@ -205,7 +205,10 @@ export const data = {
     makeItem("chinese PUMPKIN CURRY", 11.95, entreeCurryOptions),
   ],
   seafood: [
-    makeItem("honey walnut PRAWNS", 15.95, 15),
+    makeItem("honey walnut PRAWNS", 15.95, [
+      makeOption("PxP", 2, "extras"),
+      15,
+    ]),
     makeItem("PAD TALAY", 15.95),
     makeItem("Shrimp in a CLAY POT", 12.95, [], 15),
     makeItem("SPICY SHRIMP", 12.95),

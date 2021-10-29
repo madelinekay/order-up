@@ -1,4 +1,5 @@
 const balance = (stoveA, stoveB, orderKey, cart) => {
+  // const individualItems = cart.map(item => item.quantity
   console.log("cart", cart);
   const [currentItem, ...remainingItems] = cart;
   console.log("currentItem", currentItem);
@@ -138,22 +139,3 @@ const balance = (stoveA, stoveB, orderKey, cart) => {
 };
 
 module.exports = { balance };
-
-// Date.now
-// every item has a completion time
-
-// Date.now = 10
-// order 1  = [5, 15, 5]
-// balanced = [5, 5] [15]
-//            [10] [15]
-// ready at = [20, 25] -> 25
-//
-// order 2 =  [5, 2]
-// start with [10] [15]
-// balanced = [15] [17]
-// ready at = [25, 27] -> 27
-//
-//
-//
-// order 3 (new order) = [5, 7, 7]
-//

@@ -69,8 +69,7 @@ export const CartContextProvider = (props) => {
 
   const getTime = (name) => {
     const orderKey = name + Date.now();
-    // get all unfulfilled orders
-    // iterate through them and rebuild stoveA and stoveB
+
     let stoveA = [],
       stoveB = [];
     for (const oldOrder of orders.filter((o) => o.status === "ongoing")) {
@@ -92,15 +91,13 @@ export const CartContextProvider = (props) => {
       orderKey,
       newOrder
     );
-    // );
-    // setStoveA(balancedStoveA);
-    // setStoveB(balancedStoveB);
+
     return orderReady;
   };
 
   const addItem = (item) => {
     setCart((state) => [...state, item]);
-    setTotal((prevState) => (prevState += item.itemPrice));
+    setTotal((prevState) => (prevState += item.itemPrice * item.quantity));
   };
 
   const addToOrders = async (name) => {
@@ -120,9 +117,10 @@ export const CartContextProvider = (props) => {
 
     await push(child(ref(database), "recentOrders"), order);
 
-    router.push("/orders");
     setCart([]);
     setTotal(0);
+
+    router.push("/orders");
   };
 
   const markOrderComplete = (id) => {

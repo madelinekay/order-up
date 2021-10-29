@@ -3,13 +3,18 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 
 const cartItem = (props) => {
-  const { name, itemPrice, protein, rice, extras, stars, notes } = props.item;
+  const { name, itemPrice, protein, rice, extras, stars, notes, quantity } =
+    props.item;
 
   return (
     <div>
       <div>
-        <div style={{ float: "right" }}>{`$${itemPrice}`}</div>
-        <div style={{ fontWeight: "bold" }}>{name}</div>
+        <div style={{ float: "right" }}>{`$${(itemPrice * quantity).toFixed(
+          2
+        )}`}</div>
+        <div style={{ fontWeight: "bold" }}>{`${name}${
+          quantity > 1 ? ` X${quantity}` : null
+        }`}</div>
       </div>
 
       <ul>

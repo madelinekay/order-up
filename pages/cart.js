@@ -86,25 +86,28 @@ const Cart = () => {
       >
         <div className={classes.dialogue}>
           <DialogTitle>Complete Order</DialogTitle>
-          <DialogContent>
-            <TextField
-              className={classes.input}
-              size="small"
-              id="name"
-              placeholder="Enter name..."
-              value={name}
-              onChange={(event) => handleName(event)}
-            />
-          </DialogContent>
+          <form onSubmit={() => addToOrders(name)}>
+            <DialogContent>
+              <TextField
+                className={classes.input}
+                size="small"
+                id="name"
+                placeholder="Enter name..."
+                value={name}
+                onChange={(event) => handleName(event)}
+              />
+            </DialogContent>
 
-          <DialogActions>
-            <Button
-              className={classes.button}
-              onClick={() => addToOrders(name)}
-            >
-              Confirm
-            </Button>
-          </DialogActions>
+            <DialogActions>
+              <Button
+                type="submit"
+                className={classes.button}
+                // onClick={() => addToOrders(name)}
+              >
+                Confirm
+              </Button>
+            </DialogActions>
+          </form>
         </div>
       </Dialog>
     </div>

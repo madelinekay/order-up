@@ -14,13 +14,17 @@ import { useContext } from "react";
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import NotesIcon from "@material-ui/icons/Notes";
+import CloseIcon from "@material-ui/icons/Close";
+import { Typography } from "@material-ui/core";
 import {
   Button,
+  Chip,
   DialogActions,
   DialogTitle,
   DialogContent,
 } from "@material-ui/core";
 import theme from "../pages/theme";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles(() => ({
   menuItem: {
@@ -34,27 +38,7 @@ const useStyles = makeStyles(() => ({
     flexWrap: "wrap",
     height: 150,
     width: 400,
-    // overflow: "auto",
-
-    // borderBottom: "1px solid #ccc",
-    // paddingBottom: 10,
-    // marginBottom: 10,
-    // "& label": {
-    //   width: "50%",
-    //   float: "left",
-    //   marginLeft: -11,
-    //   marginRight: 11,
-    // },
   },
-  // otherOptions: {
-  //   display: "flex",
-  // },
-  // rice: {
-  //   flex: 1,
-  // },
-  // extras: {
-  //   flex: 1,
-  // },
   icons: {
     color: theme.palette.primary.dark,
   },
@@ -130,13 +114,14 @@ const MenuItem = (props) => {
         extras: [],
         notes: "",
         stars: 0,
+        quantity: 1,
       },
       validationSchema,
       validateOnBlur: false,
       validateOnChange: false,
 
       onSubmit: async (values) => {
-        const { protein, rice, extras = [], notes, stars } = values;
+        const { protein, rice, extras = [], notes, stars, quantity } = values;
 
         let ricePrice = 0;
         if (rice.length > 0) {
@@ -171,6 +156,7 @@ const MenuItem = (props) => {
           stars,
           itemPrice,
           time,
+          quantity,
         };
 
         addItem(cartItem);
@@ -191,25 +177,12 @@ const MenuItem = (props) => {
       >
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <DialogTitle>{name}</DialogTitle>
-          <IconButton onClick={() => setNotes(true)}>
-            <NotesIcon />
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
           </IconButton>
         </div>
         <form onSubmit={handleSubmit}>
           <DialogContent>
-            {notes ? (
-              <FormControl>
-                <TextField
-                  style={{ width: "100%" }}
-                  size="small"
-                  id="notes"
-                  name="notes"
-                  placeholder="add notes"
-                  value={values.notes}
-                  onChange={handleChange}
-                />
-              </FormControl>
-            ) : null}
             {groupedOptions.protein ? (
               <FormControl error={!!errors.protein}>
                 {errors.protein ? (
@@ -296,6 +269,58 @@ const MenuItem = (props) => {
                   </FormGroup>
                 </FormControl>
               ) : null}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: 30,
+              }}
+            >
+              <div>
+                {notes ? (
+                  <FormControl>
+                    <TextField
+                      InputProps={{ disableUnderline: true }}
+                      style={{ width: "100%" }}
+                      size="small"
+                      id="notes"
+                      name="notes"
+                      placeholder="add notes"
+                      value={values.notes}
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                ) : (
+                  <Button
+                    style={{ marginRight: 20 }}
+                    onClick={() => setNotes(true)}
+                  >
+                    <div style={{ marginRight: 30 }}>Add notes</div>
+                    <ExpandMoreIcon />
+                  </Button>
+                )}
+              </div>
+
+              <>
+                <label
+                  htmlFor="quantity"
+                  style={{ marginTop: 5, marginRight: 5 }}
+                >
+                  Quantity:
+                </label>
+                <TextField
+                  value={values.quantity}
+                  onChange={handleChange}
+                  placeholder="1"
+                  type="number"
+                  min="0"
+                  max="50"
+                  style={{ width: "10%" }}
+                  id="quantity"
+                  InputProps={{ disableUnderline: true }}
+                />
+              </>
             </div>
           </DialogContent>
           <DialogActions
