@@ -11,8 +11,8 @@ import {
   remove,
 } from "firebase/database";
 import { initializeApp } from "firebase/app";
-import { SettingsOverscan } from "@material-ui/icons";
 import { balance } from "./cart-utils/getTime";
+import { ListItemIcon } from "@material-ui/core";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA1oL-kZSAuizXIH5lCiGMJmxBqJ26ZMAk",
@@ -45,8 +45,6 @@ export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
-  const [stoveA, setStoveA] = useState([]);
-  const [stoveB, setStoveB] = useState([]);
 
   const router = useRouter();
 
@@ -81,23 +79,31 @@ export const CartContextProvider = (props) => {
       );
       stoveA = updatedStoveA;
       stoveB = updatedStoveB;
-      console.log("stove A & B: ", stoveA, stoveB);
     }
 
-    const newOrder = cart.sort((a, b) => b.time - a.time);
+    const individualItems = cart
+      .map((item) => new Array(item.quantity).fill(item))
+      .reduce((acc, arr) => [...acc, ...arr], [])
+      .sort((a, b) => b.time - a.time);
+    console.log("individualItems", individualItems);
+    console.log("individualItems[0]", individualItems[0]);
     const [orderReady, balancedStoveA, balancedStoveB] = balance(
       stoveA,
       stoveB,
       orderKey,
-      newOrder
+      individualItems
     );
 
     return orderReady;
   };
 
   const addItem = (item) => {
+    console.log("addItem item", item);
+    if (window.DEBUG) {
+      debugger;
+    }
     setCart((state) => [...state, item]);
-    setTotal((prevState) => (prevState += item.itemPrice * item.quantity));
+    setTotal((prevState) => prevState + item.itemPrice * item.quantity);
   };
 
   const addToOrders = async (name) => {
@@ -109,6 +115,7 @@ export const CartContextProvider = (props) => {
       timePlaced: new Date().toLocaleTimeString(
         ([], { hour: "2-digit", minute: "2-digit" })
       ),
+      timeReadyMilliseconds,
       timeReady,
       total,
       name,

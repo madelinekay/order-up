@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Chip,
 } from "@material-ui/core";
 import { OpenInNew } from "@material-ui/icons";
 
@@ -44,6 +45,17 @@ const Cart = () => {
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
 
+  const [editOpen, setEditOpen] = useState(false)
+
+  const openEdit = () => {
+    setEditOpen(true);
+  };
+
+  const closeEdit = () => {
+    setEditOpen(false);
+  };
+
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -60,25 +72,33 @@ const Cart = () => {
   return (
     <div style={{ margin: "0 auto", width: 600, padding: 30 }}>
       {cart.length > 0 ? (
-        <Card style={{ padding: 20 }}>
-          <CardHeader title="Cart" />
-          <CardContent>
+        <div style={{ padding: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>Cart</div> <Chip label={`$${total * 0.065 + total}`} />
+          </div>
+          <div>
             <div>
               {cart.map((item, index) => (
                 <CartItem key={index} item={item} />
               ))}
             </div>
-          </CardContent>
+          </div>
           <div>
-            <Button className={classes.button} onClick={handleOpen}>
+            <Button
+              className={classes.button}
+              onClick={handleOpen}
+              style={{ marginTop: 30 }}
+            >
               Add to orders
             </Button>
-            {/* <Button style={{ float: "right" }}>Edit Cart</Button> */}
           </div>
-        </Card>
+        </div>
       ) : (
         <div>Cart is empty</div>
       )}
+      <Dialog open={editOpen} onClose={closeEdit}>
+
+      </Dialog>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -102,7 +122,7 @@ const Cart = () => {
               <Button
                 type="submit"
                 className={classes.button}
-                // onClick={() => addToOrders(name)}
+              // onClick={() => addToOrders(name)}
               >
                 Confirm
               </Button>

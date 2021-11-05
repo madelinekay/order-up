@@ -1,6 +1,4 @@
 const balance = (stoveA, stoveB, orderKey, cart) => {
-  // const individualItems = cart.map(item => item.quantity
-  console.log("cart", cart);
   const [currentItem, ...remainingItems] = cart;
   console.log("currentItem", currentItem);
   const readyTimeA = stoveA.at(-1) ? stoveA.at(-1).orderReady : 0;
@@ -38,8 +36,7 @@ const balance = (stoveA, stoveB, orderKey, cart) => {
             orderReady: Date.now() + currentItem.time * 60000,
           },
         ],
-        stoveB,
-        currentItem.time
+        stoveB
       );
       return balance(
         [

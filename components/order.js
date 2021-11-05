@@ -33,7 +33,6 @@ const Order = (props) => {
   const classes = useStyles();
   const { items, name, timePlaced, total, id, status, timeReady } = props.order;
   const { markOrderComplete, deleteOrder } = useContext(CartContext);
-  console.log("total", total);
 
   const tax = total * 0.065;
   const totalPlusTax = (tax + +total).toFixed(2);
