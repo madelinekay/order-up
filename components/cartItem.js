@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 
 const cartItem = (props) => {
   const classes = useStyles();
-  const { name, itemPrice, protein, rice, extras, stars, notes, quantity } =
+  const { name, itemPrice, protein, rice, extras, stars, notes, quantity, id } =
     props.item;
 
 
@@ -37,8 +37,10 @@ const cartItem = (props) => {
         </ul>
       </CardContent>
       <CardActions style={{ float: "right" }}>
-        <IconButton>
-          <EditIcon onClick={props.openEdit} />
+        <IconButton onClick={props.onOpen} >
+          <EditIcon />
+        </IconButton>
+        <IconButton onClick={props.delete}>
           <DeleteIcon />
         </IconButton>
       </CardActions>

@@ -34,11 +34,12 @@ const CartContext = createContext({
   cart: [],
   orders: [],
   total: 0,
-  addItem: (item) => {},
-  addToOrders: () => {},
-  fetchOrders: () => {},
-  addToArchive: () => {},
-  deleteOrder: () => {},
+  addItem: (item) => { },
+  addToOrders: () => { },
+  fetchOrders: () => { },
+  addToArchive: () => { },
+  deleteOrder: () => { },
+  deleteCartItem: () => { }
 });
 
 export const CartContextProvider = (props) => {
@@ -64,6 +65,16 @@ export const CartContextProvider = (props) => {
       }
     });
   }, []);
+
+  const deleteCartItem = (itemId) => {
+    console.log('deleteCart');
+    const deleted = cart.findIndex(item => item.id === itemId)
+    console.log('deleted', deleted);
+    const cartCopy = [...cart];
+    cartCopy.splice(deleted, 1);
+    console.log('cartCopy', cartCopy);
+    setCart(cartCopy)
+  }
 
   const getTime = (name) => {
     const orderKey = name + Date.now();
@@ -155,6 +166,7 @@ export const CartContextProvider = (props) => {
     markOrderComplete,
     addToArchive,
     deleteOrder,
+    deleteCartItem,
   };
 
   return (

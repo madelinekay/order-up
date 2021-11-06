@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import CartItem from "../components/cartItem";
+import ItemDialogForm from "../components/itemDialogForm"
 import CartContext from "../utils/cart-context";
 import Button from "@material-ui/core/Button";
 import {
@@ -39,30 +40,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Cart = () => {
-  const { cart, total, addToOrders } = useContext(CartContext);
+  const { cart, total, addToOrders, deleteCartItem } = useContext(CartContext);
   const classes = useStyles();
 
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
 
-  const [editOpen, setEditOpen] = useState(false)
+  // const [editOpen, setEditOpen] = useState(false)
+  const [editItem, setEditItem] = useState()
 
-  const openEdit = () => {
-    setEditOpen(true);
-  };
+  const openEdit = (item) => setEditItem(item);
+  const closeEdit = () => setEditItem();
 
-  const closeEdit = () => {
-    setEditOpen(false);
-  };
-
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleName = (event) => {
     const enteredName = event.target.value;
@@ -79,7 +70,7 @@ const Cart = () => {
           <div>
             <div>
               {cart.map((item, index) => (
-                <CartItem key={index} item={item} />
+                <CartItem key={index} item={item} onOpen={() => openEdit(item)} delete={() => deleteCartItem(item.id)} />
               ))}
             </div>
           </div>
@@ -96,9 +87,9 @@ const Cart = () => {
       ) : (
         <div>Cart is empty</div>
       )}
-      <Dialog open={editOpen} onClose={closeEdit}>
 
-      </Dialog>
+      {editItem ? <ItemDialogForm onClose={closeEdit} open={!!editItem} item={editItem} /> : null}
+
       <Dialog
         open={open}
         onClose={handleClose}
