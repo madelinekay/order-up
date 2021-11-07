@@ -10,8 +10,7 @@ describe("balance", () => {
 
     const cart1 = [{ time: 5 }, { time: 10 }, { time: 5 }];
     const [time1, stoveA, stoveB] = balance([], [], orderKey, cart1);
-    console.log("stoveA", stoveA);
-    console.log("stoveB", stoveB);
+
     expect(time1).toBe(startTime + 10 * MINUTES);
 
     // const cart2 = [{ time: 5 }, { time: 10 }, { time: 5 }, { time: 7 }];

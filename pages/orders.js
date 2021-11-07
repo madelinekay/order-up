@@ -17,10 +17,8 @@ const Orders = () => {
   const classes = useStyles();
 
   const sortedOrders = orders.sort((a, b) => {
-    console.log("a.time", a.timeReadyMilliseconds);
     return b.timeReadyMilliseconds - a.timeReadyMilliseconds;
   });
-  console.log("sortedOrders[0]", sortedOrders[0]);
 
   return (
     <div style={{ margin: "0 auto", width: 1200 }}>

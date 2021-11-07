@@ -113,8 +113,6 @@ const ItemDialogForm = (props) => {
             validateOnChange: false,
 
             onSubmit: async (values) => {
-                console.log('onSubmit', values)
-
                 const { protein, rice, extras = [], notes, stars, quantity } = values;
 
                 let ricePrice = 0;
@@ -151,9 +149,11 @@ const ItemDialogForm = (props) => {
                     itemPrice,
                     time,
                     quantity,
+                    options,
+                    id: name + Date.now()
                 };
 
-                addItem(cartItem);
+                props.onAdd(cartItem);
                 props.onClose();
             },
         });
@@ -161,8 +161,6 @@ const ItemDialogForm = (props) => {
     const handleStarsChanged = (starCount) => {
         setFieldValue("stars", starCount);
     };
-
-    console.log('formik values', values)
 
     return (
         <>

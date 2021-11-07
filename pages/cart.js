@@ -4,12 +4,6 @@ import ItemDialogForm from "../components/itemDialogForm"
 import CartContext from "../utils/cart-context";
 import Button from "@material-ui/core/Button";
 import {
-  Card,
-  CardContent,
-  CardActions,
-  CardHeader,
-  Input,
-  InputBase,
   TextField,
   makeStyles,
   Dialog,
@@ -18,7 +12,6 @@ import {
   DialogActions,
   Chip,
 } from "@material-ui/core";
-import { OpenInNew } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -40,17 +33,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Cart = () => {
-  const { cart, total, addToOrders, deleteCartItem } = useContext(CartContext);
+  const { cart, total, addToOrders, deleteCartItem, editCartItem } = useContext(CartContext);
   const classes = useStyles();
 
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
 
-  // const [editOpen, setEditOpen] = useState(false)
   const [editItem, setEditItem] = useState()
 
   const openEdit = (item) => setEditItem(item);
-  const closeEdit = () => setEditItem();
+  const closeEdit = () => setEditItem(null);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -70,7 +62,7 @@ const Cart = () => {
           <div>
             <div>
               {cart.map((item, index) => (
-                <CartItem key={index} item={item} onOpen={() => openEdit(item)} delete={() => deleteCartItem(item.id)} />
+                <CartItem key={index} item={item} onOpen={() => openEdit(item)} delete={() => deleteCartItem(item.id, item.price)} />
               ))}
             </div>
           </div>
@@ -88,7 +80,7 @@ const Cart = () => {
         <div>Cart is empty</div>
       )}
 
-      {editItem ? <ItemDialogForm onClose={closeEdit} open={!!editItem} item={editItem} /> : null}
+      {editItem ? <ItemDialogForm onAdd={(cartItem) => editCartItem(cartItem)} onClose={closeEdit} open={!!editItem} item={editItem} /> : null}
 
       <Dialog
         open={open}

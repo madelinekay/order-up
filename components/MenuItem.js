@@ -1,33 +1,10 @@
-import { useState } from "react";
-import * as yup from "yup";
-import IconButton from "@material-ui/core/IconButton";
-import { Field, useFormik } from "formik";
-import { FormHelperText } from "@material-ui/core";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
-import Checkbox from "@material-ui/core/Checkbox";
-import { makeStyles, FormControl, TextField, Dialog } from "@material-ui/core";
-import CartContext from "../utils/cart-context";
-import { useContext } from "react";
-import StarIcon from "@material-ui/icons/Star";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import NotesIcon from "@material-ui/icons/Notes";
-import CloseIcon from "@material-ui/icons/Close";
-import { Typography } from "@material-ui/core";
-import {
-  Button,
-  Chip,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-} from "@material-ui/core";
-import theme from "../pages/theme";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { date } from "yup/lib/locale";
 import ItemDialogForm from "./itemDialogForm";
 
+import { useState } from "react";
+import { makeStyles, Button } from "@material-ui/core";
+import CartContext from "../utils/cart-context";
+import { useContext } from "react";
+import theme from "../pages/theme";
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -38,6 +15,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const MenuItem = (props) => {
+  const { addItem } = useContext(CartContext)
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -52,7 +30,7 @@ const MenuItem = (props) => {
 
   return (
     <>
-      <ItemDialogForm open={open}
+      <ItemDialogForm open={open} onAdd={addItem}
         onClose={handleClose} item={props.item}
         style={{ margin: "auto", width: 550 }} />
 

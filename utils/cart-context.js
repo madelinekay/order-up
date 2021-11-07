@@ -39,7 +39,8 @@ const CartContext = createContext({
   fetchOrders: () => { },
   addToArchive: () => { },
   deleteOrder: () => { },
-  deleteCartItem: () => { }
+  deleteCartItem: () => { },
+  editCartItem: () => { },
 });
 
 export const CartContextProvider = (props) => {
@@ -66,13 +67,21 @@ export const CartContextProvider = (props) => {
     });
   }, []);
 
-  const deleteCartItem = (itemId) => {
-    console.log('deleteCart');
-    const deleted = cart.findIndex(item => item.id === itemId)
-    console.log('deleted', deleted);
+  const deleteCartItem = (itemId, itemPrice) => {
+    const itemIndex = cart.findIndex(item => item.id === itemId)
     const cartCopy = [...cart];
-    cartCopy.splice(deleted, 1);
-    console.log('cartCopy', cartCopy);
+    cartCopy.splice(itemIndex, 1);
+
+    setTotal((prevState) => prevState - itemPrice)
+    setCart(cartCopy)
+  }
+
+  const editCartItem = (item) => {
+    const itemIndex = cart.findIndex(i => i.id === item.id)
+    const cartCopy = [...cart]
+    cartCopy.splice(itemIndex, 1, item)
+
+    // setTotal(prevState)
     setCart(cartCopy)
   }
 
@@ -96,8 +105,7 @@ export const CartContextProvider = (props) => {
       .map((item) => new Array(item.quantity).fill(item))
       .reduce((acc, arr) => [...acc, ...arr], [])
       .sort((a, b) => b.time - a.time);
-    console.log("individualItems", individualItems);
-    console.log("individualItems[0]", individualItems[0]);
+
     const [orderReady, balancedStoveA, balancedStoveB] = balance(
       stoveA,
       stoveB,
@@ -109,8 +117,8 @@ export const CartContextProvider = (props) => {
   };
 
   const addItem = (item) => {
-    console.log("addItem item", item);
     if (window.DEBUG) {
+      const itemIndex = cart.findIndex(item => item.id === itemId)
       debugger;
     }
     setCart((state) => [...state, item]);
@@ -167,6 +175,7 @@ export const CartContextProvider = (props) => {
     addToArchive,
     deleteOrder,
     deleteCartItem,
+    editCartItem,
   };
 
   return (
