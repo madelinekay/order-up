@@ -57,12 +57,12 @@ const Cart = () => {
       {cart.length > 0 ? (
         <div style={{ padding: 20 }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Cart</div> <Chip label={`$${total * 0.065 + total}`} />
+            <div>Cart</div> <Chip label={`$${(total * 0.065 + total).toFixed(2)}`} />
           </div>
           <div>
             <div>
               {cart.map((item, index) => (
-                <CartItem key={index} item={item} onOpen={() => openEdit(item)} delete={() => deleteCartItem(item.id, item.price)} />
+                <CartItem key={index} item={item} onOpen={() => openEdit(item)} delete={() => deleteCartItem(item)} />
               ))}
             </div>
           </div>
@@ -80,7 +80,7 @@ const Cart = () => {
         <div>Cart is empty</div>
       )}
 
-      {editItem ? <ItemDialogForm onAdd={(cartItem) => editCartItem(cartItem)} onClose={closeEdit} open={!!editItem} item={editItem} /> : null}
+      {editItem ? <ItemDialogForm onAdd={(cartItem, prevItem) => editCartItem(cartItem, prevItem)} onClose={closeEdit} open={!!editItem} item={editItem} /> : null}
 
       <Dialog
         open={open}

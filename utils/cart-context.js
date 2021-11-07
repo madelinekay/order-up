@@ -67,21 +67,21 @@ export const CartContextProvider = (props) => {
     });
   }, []);
 
-  const deleteCartItem = (itemId, itemPrice) => {
-    const itemIndex = cart.findIndex(item => item.id === itemId)
+  const deleteCartItem = (item) => {
+    const itemIndex = cart.findIndex(i => i.id === item.id)
     const cartCopy = [...cart];
     cartCopy.splice(itemIndex, 1);
 
-    setTotal((prevState) => prevState - itemPrice)
+    setTotal((prevState) => prevState - item.itemPrice)
     setCart(cartCopy)
   }
 
-  const editCartItem = (item) => {
+  const editCartItem = (item, prevItem) => {
     const itemIndex = cart.findIndex(i => i.id === item.id)
     const cartCopy = [...cart]
     cartCopy.splice(itemIndex, 1, item)
 
-    // setTotal(prevState)
+    setTotal(prevState => prevState - prevItem.itemPrice + item.itemPrice)
     setCart(cartCopy)
   }
 

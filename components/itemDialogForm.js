@@ -146,6 +146,7 @@ const ItemDialogForm = (props) => {
                     extras,
                     notes,
                     stars,
+                    price,
                     itemPrice,
                     time,
                     quantity,
@@ -153,7 +154,7 @@ const ItemDialogForm = (props) => {
                     id: name + Date.now()
                 };
 
-                props.onAdd(cartItem);
+                props.onAdd(cartItem, item);
                 props.onClose();
             },
         });
