@@ -68,6 +68,7 @@ const Cart = () => {
           </div>
           <div>
             <Button
+              type="button"
               className={classes.button}
               onClick={handleOpen}
               style={{ marginTop: 30 }}
@@ -89,7 +90,10 @@ const Cart = () => {
       >
         <div className={classes.dialogue}>
           <DialogTitle>Complete Order</DialogTitle>
-          <form onSubmit={() => addToOrders(name)}>
+          <form onSubmit={(e) => {
+            e.preventDefault()
+            addToOrders(name)
+          }}>
             <DialogContent>
               <TextField
                 className={classes.input}

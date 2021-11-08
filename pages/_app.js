@@ -6,14 +6,6 @@ import { useEffect } from "react";
 import { SearchContextProvider } from "../utils/search-context";
 import theme from "./theme";
 
-// Import the functions you need from the SDKs you need
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
@@ -21,11 +13,6 @@ function MyApp({ Component, pageProps }) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
-
-  // Initialize Firebase
-  // useEffect(() => {
-
-  // }, []);
 
   return (
     <ThemeProvider theme={theme}>

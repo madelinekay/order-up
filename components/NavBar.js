@@ -4,24 +4,19 @@ import {
   AppBar,
   Toolbar,
   makeStyles,
-  IconButton,
   TextField,
-  Button,
-  Chip,
   InputAdornment,
-  Input,
+
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import SearchIcon from "@material-ui/icons/Search";
-// import InputBase from "@material-ui/core/InputBase";
 import { categories } from "../utils/data";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchContext from "../utils/search-context";
 import MenuIcon from "@material-ui/icons/Menu";
-import { BlockRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -33,8 +28,6 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: "flex",
     justifyContent: "space-evenly",
-    // marginRight: theme.spacing(30),
-    // marginLeft: theme.spacing(30),
   },
   menu: {
     display: "flex",
@@ -43,14 +36,8 @@ const useStyles = makeStyles((theme) => ({
     color: "#70008e",
     fontWeight: "bold",
   },
-  navItem: {
-    marginRight: theme.spacing(1),
-  },
 
   search: {
-    // flex: 1,
-    // marginLeft: 60,
-    // marginRight: 140,
     width: 300,
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -69,7 +56,6 @@ const useStyles = makeStyles((theme) => ({
   inputInput: {
     backgroundColor: "#d128ff",
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -106,7 +92,6 @@ const MainNavigation = () => {
             value={searchQuery}
             classes={{
               root: classes.inputRoot,
-              // input: classes.inputInput,
             }}
             fullWidth
             InputProps={{
@@ -128,14 +113,14 @@ const MainNavigation = () => {
             width: 150,
           }}
         >
-          {/* <div className={classes.navItem}> */}
+
           <Link href="/">
             <HomeIcon />
           </Link>
-          {/* </div> */}
+
 
           <div className={classes.menu}>
-            {/* <div className={classes.navItem}> */}
+
             <RestaurantMenuIcon
               color="inherit"
               id="basic-button"
@@ -144,7 +129,7 @@ const MainNavigation = () => {
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
             />
-            {/* </div> */}
+
 
             <Menu
               id="basic-menu"
@@ -163,16 +148,15 @@ const MainNavigation = () => {
             </Menu>
           </div>
 
-          {/* <div className={classes.navItem}> */}
+
           <Link href={"/cart"}>
             <ShoppingCartIcon />
           </Link>
-          {/* </div> */}
-          {/* <div className={classes.navItem}> */}
+
           <Link href={"/orders"}>
             <MenuIcon />
           </Link>
-          {/* </div> */}
+
         </div>
       </Toolbar>
     </AppBar>

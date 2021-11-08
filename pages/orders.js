@@ -1,8 +1,8 @@
 import { Button, makeStyles } from "@material-ui/core";
-import { useEffect, useContext, useState } from "react";
+import { useContext } from "react";
 import Order from "../components/order";
 import CartContext from "../utils/cart-context";
-import { useRouter } from "next/router";
+
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -10,6 +10,16 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.dark,
     border: `1px solid ${theme.palette.primary.dark}`,
   },
+  grid: {
+    padding: 30,
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    ["@media (max-width: 769px)"]: {
+      gridTemplateColumns: "repeat(2, 1fr)"
+    },
+    gridTemplateRows: "repeat(auto-fill, 1fr)",
+    gridGap: 20,
+  }
 }));
 
 const Orders = () => {
@@ -17,19 +27,13 @@ const Orders = () => {
   const classes = useStyles();
 
   const sortedOrders = orders.sort((a, b) => {
-    return b.timeReadyMilliseconds - a.timeReadyMilliseconds;
+    return b.timePlacedMilliseconds - a.timePlacedMilliseconds;
   });
 
   return (
-    <div style={{ margin: "0 auto", width: 1200 }}>
+    <div style={{ margin: "0 auto", maxWidth: 1200 }}>
       <div
-        style={{
-          padding: 30,
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gridTemplateRows: "repeat(auto-fill, 1fr)",
-          gridGap: 20,
-        }}
+        className={classes.grid}
       >
         {sortedOrders.map((order) => (
           <Order key={order.id} order={order} />

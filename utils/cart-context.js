@@ -131,10 +131,10 @@ export const CartContextProvider = (props) => {
 
     const order = {
       items: cart,
+      timePlacedMilliseconds: Date.now(),
       timePlaced: new Date().toLocaleTimeString(
         ([], { hour: "2-digit", minute: "2-digit" })
       ),
-      timeReadyMilliseconds,
       timeReady,
       total,
       name,
