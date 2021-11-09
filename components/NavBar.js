@@ -1,3 +1,5 @@
+import { categories } from "../utils/data";
+
 import Link from "next/link";
 import { useContext, useState } from "react";
 import {
@@ -12,7 +14,6 @@ import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import SearchIcon from "@material-ui/icons/Search";
-import { categories } from "../utils/data";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchContext from "../utils/search-context";

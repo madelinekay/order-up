@@ -1,17 +1,16 @@
+import CartContext from "../utils/cart-context";
+
 import {
   Card,
-  CardActions,
   CardContent,
   CardHeader,
   IconButton,
-  Button,
   Chip,
   makeStyles,
 } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useContext } from "react";
-import CartContext from "../utils/cart-context";
 
 const useStyles = makeStyles((theme) => ({
   chipOngoing: {

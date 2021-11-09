@@ -1,6 +1,7 @@
 import MenuItem from "../components/MenuItem";
-import { useRouter } from "next/router";
 import data from "../utils/data";
+
+import { useRouter } from "next/router";
 
 const Category = () => {
     const router = useRouter();
