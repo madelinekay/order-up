@@ -1,6 +1,6 @@
 import { Button, makeStyles } from "@material-ui/core";
 import { useContext } from "react";
-import Order from "../components/order";
+import Order from "../components/OrderItem";
 import CartContext from "../utils/cart-context";
 
 

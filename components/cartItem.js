@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const cartItem = (props) => {
+const CartItem = (props) => {
   const classes = useStyles();
   const { name, itemPrice, protein, rice, extras, stars, notes, quantity, id } =
     props.item;
@@ -53,7 +53,7 @@ const cartItem = (props) => {
   );
 };
 
-export default cartItem;
+export default CartItem;
 
 // <div>
 // <div>

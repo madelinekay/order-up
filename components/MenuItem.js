@@ -1,10 +1,10 @@
-import ItemDialogForm from "./itemDialogForm";
+import ItemDialogForm from "./ItemDialogForm";
 
 import { useState } from "react";
 import { makeStyles, Button } from "@material-ui/core";
 import CartContext from "../utils/cart-context";
 import { useContext } from "react";
-import theme from "../pages/theme";
+import theme from "../styles/theme";
 
 const useStyles = makeStyles(() => ({
   button: {

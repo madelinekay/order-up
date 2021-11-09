@@ -21,7 +21,7 @@ import {
     DialogTitle,
     DialogContent,
 } from "@material-ui/core";
-import theme from "../pages/theme";
+import theme from "../styles/theme";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles(() => ({

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import CartItem from "../components/cartItem";
-import ItemDialogForm from "../components/itemDialogForm"
+import CartItem from "../components/CartItem";
+import ItemDialogForm from "../components/ItemDialogForm"
 import CartContext from "../utils/cart-context";
 import Button from "@material-ui/core/Button";
 import {
