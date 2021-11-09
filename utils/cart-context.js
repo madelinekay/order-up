@@ -156,7 +156,7 @@ export const CartContextProvider = (props) => {
     setCart([]);
     setTotal(0);
 
-    router.push("/orders");
+    router.push("/Orders");
   };
 
   const markOrderComplete = (id) => {

@@ -150,11 +150,11 @@ const MainNavigation = () => {
           </div>
 
 
-          <Link href={"/cart"}>
+          <Link href={"/Cart"}>
             <ShoppingCartIcon />
           </Link>
 
-          <Link href={"/orders"}>
+          <Link href={"/Orders"}>
             <KitchenIcon />
           </Link>
 

@@ -4,7 +4,7 @@ import { CartContextProvider } from "../utils/cart-context";
 import Layout from "../components/Layout";
 import { useEffect } from "react";
 import { SearchContextProvider } from "../utils/search-context";
-import theme from "./theme";
+import theme from "../styles/theme";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {

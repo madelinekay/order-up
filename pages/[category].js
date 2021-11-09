@@ -11,7 +11,7 @@ const Category = () => {
     }
 
     return (
-        <div style={{ margin: "0 auto", width: 1200 }}>
+        <div style={{ margin: "0 auto", maxWidth: 1200 }}>
             <div
                 style={{
                     padding: 30,
