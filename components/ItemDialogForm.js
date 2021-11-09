@@ -1,4 +1,4 @@
-import CartContext from "../utils/cart-context";
+import theme from "../styles/theme";
 
 import React, { useState } from "react";
 import * as yup from "yup";
@@ -11,10 +11,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import Checkbox from "@material-ui/core/Checkbox";
 import { makeStyles, FormControl, TextField, Dialog } from "@material-ui/core";
-import { useContext } from "react";
 import StarIcon from "@material-ui/icons/Star";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
-
 import CloseIcon from "@material-ui/icons/Close";
 import {
     Button,
@@ -22,7 +20,6 @@ import {
     DialogTitle,
     DialogContent,
 } from "@material-ui/core";
-import theme from "../styles/theme";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles(() => ({
@@ -65,8 +62,6 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-// const defaultItem = { options = [], protein = "", rice = "", extras =[], stars = 0, quantity = 1 }
-
 const ItemDialogForm = (props) => {
     const [notes, setNotes] = useState();
 
@@ -81,7 +76,6 @@ const ItemDialogForm = (props) => {
     const item = { ...itemDefaults, ...props.item }
     const { options = [], name, price, category, time } = item; //these may not be in item, and if they are, some fields may not exist 
     const classes = useStyles();
-    const { addItem } = useContext(CartContext);
 
     const groupedOptions = options.reduce((acc, option) => {
         return {
@@ -106,7 +100,7 @@ const ItemDialogForm = (props) => {
 
     const validationSchema = yup.object(rawSchema);
 
-    const { values, errors, touched, setFieldValue, handleChange, handleSubmit } =
+    const { values, errors, setFieldValue, handleChange, handleSubmit } =
         useFormik({
             initialValues: item,
             validationSchema,

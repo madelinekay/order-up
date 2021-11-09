@@ -18,12 +18,11 @@ const useStyles = makeStyles((theme) => ({
 
 const CartItem = (props) => {
   const classes = useStyles();
-  const { name, itemPrice, protein, rice, extras, stars, notes, quantity, id } =
+  const { name, itemPrice, protein, rice, extras, stars, notes, quantity } =
     props.item;
 
-
   return (
-    <Card>
+    <Card style={{ marginBottom: 30 }}>
       <CardHeader
         className={classes.header}
         title={`${name}${quantity > 1 ? ` X${quantity}` : ""}`}

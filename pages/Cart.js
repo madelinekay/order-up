@@ -41,18 +41,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Cart = () => {
-  const { cart, total, addToOrders, deleteCartItem, editCartItem } = useContext(CartContext);
+  const { cart, addToOrders, deleteCartItem, editCartItem, calculateTotal } = useContext(CartContext);
   const classes = useStyles();
 
-  let totalWithFees = 0
-  if (total < 5) {
-    totalWithFees = total + .5;
-  } else {
-    totalWithFees = total
-  }
-
-  const tax = totalWithFees * 0.065;
-  const totalPlusTax = (tax + totalWithFees).toFixed(2);
+  const { totalPlusTax } = calculateTotal();
 
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);

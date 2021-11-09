@@ -33,7 +33,7 @@ const ordersRef = ref(database, "recentOrders");
 const CartContext = createContext({
   cart: [],
   orders: [],
-  total: 0,
+  // total: 0,
   addItem: (item) => { },
   addToOrders: () => { },
   fetchOrders: () => { },
@@ -41,11 +41,12 @@ const CartContext = createContext({
   deleteOrder: () => { },
   deleteCartItem: () => { },
   editCartItem: () => { },
+  calculateTotal: () => { },
 });
 
 export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
-  const [total, setTotal] = useState(0);
+  // const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
 
   const router = useRouter();
@@ -72,7 +73,7 @@ export const CartContextProvider = (props) => {
     const cartCopy = [...cart];
     cartCopy.splice(itemIndex, 1);
 
-    setTotal((prevState) => prevState - item.itemPrice)
+    // setTotal((prevState) => prevState - item.itemPrice)
     setCart(cartCopy)
   }
 
@@ -81,21 +82,28 @@ export const CartContextProvider = (props) => {
     const cartCopy = [...cart]
     cartCopy.splice(itemIndex, 1, item)
 
-    setTotal(prevState => prevState - prevItem.itemPrice + item.itemPrice)
+    // setTotal(prevState => prevState - prevItem.itemPrice + item.itemPrice)
     setCart(cartCopy)
   }
 
   const getTime = (name) => {
-    const orderKey = name + Date.now();
+    const currentOrderKey = name + Date.now();
 
+
+    const filteredOrders = orders.filter((o) => o.status === "ongoing").sort((a, b) => {
+      return a.timePlacedMilliseconds - b.timePlacedMilliseconds;
+    })
+    console.log('orders', filteredOrders);
     let stoveA = [],
       stoveB = [];
-    for (const oldOrder of orders.filter((o) => o.status === "ongoing")) {
+    for (const oldOrder of filteredOrders) {
+      const orderKey = name + Date.now();
       const [orderReadyAt, updatedStoveA, updatedStoveB] = balance(
         stoveA,
         stoveB,
         orderKey,
-        oldOrder.items.sort((a, b) => b.time - a.time)
+        oldOrder.items.sort((a, b) => b.time - a.time),
+        oldOrder.timePlacedMilliseconds
       );
       stoveA = updatedStoveA;
       stoveB = updatedStoveB;
@@ -109,24 +117,16 @@ export const CartContextProvider = (props) => {
     const [orderReady, balancedStoveA, balancedStoveB] = balance(
       stoveA,
       stoveB,
-      orderKey,
-      individualItems
+      currentOrderKey,
+      individualItems,
+      Date.now()
     );
 
     return orderReady;
   };
 
-  const addItem = (item) => {
-    if (window.DEBUG) {
-      const itemIndex = cart.findIndex(item => item.id === itemId)
-      debugger;
-    }
-    setCart((state) => [...state, item]);
-    setTotal((prevState) => prevState + item.itemPrice * item.quantity);
-  };
-
-  const addToOrders = async (name) => {
-    const timeReadyMilliseconds = getTime(name);
+  const calculateTotal = () => {
+    const total = cart.reduce((acc, item) => acc + (item.itemPrice * item.quantity), 0)
 
     let totalWithFees = 0
     if (total < 5) {
@@ -138,6 +138,23 @@ export const CartContextProvider = (props) => {
     const tax = totalWithFees * 0.065;
     const totalPlusTax = (tax + totalWithFees).toFixed(2);
 
+    return { tax, totalPlusTax }
+  }
+
+
+  const addItem = (item) => {
+    if (window.DEBUG) {
+      const itemIndex = cart.findIndex(item => item.id === itemId)
+      debugger;
+    }
+    setCart((state) => [...state, item]);
+    // setTotal((prevState) => prevState + item.itemPrice * item.quantity);
+  };
+
+  const addToOrders = async (name) => {
+    const timeReadyMilliseconds = getTime(name);
+    const { tax, totalPlusTax } = calculateTotal();
+
     const order = {
       items: cart,
       timePlacedMilliseconds: Date.now(),
@@ -145,6 +162,7 @@ export const CartContextProvider = (props) => {
         [], { hour: "2-digit", minute: "2-digit" }
       ),
       timeReady: new Date(timeReadyMilliseconds).toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" }),
+      timeReadyMilliseconds,
       tax: tax.toFixed(2),
       totalPlusTax,
       name,
@@ -154,7 +172,7 @@ export const CartContextProvider = (props) => {
     await push(child(ref(database), "recentOrders"), order);
 
     setCart([]);
-    setTotal(0);
+    // setTotal(0);
 
     router.push("/Orders");
   };
@@ -178,7 +196,7 @@ export const CartContextProvider = (props) => {
   const contextValue = {
     cart,
     orders,
-    total,
+    // total,
     addItem,
     addToOrders,
     markOrderComplete,
@@ -186,6 +204,7 @@ export const CartContextProvider = (props) => {
     deleteOrder,
     deleteCartItem,
     editCartItem,
+    calculateTotal,
   };
 
   return (

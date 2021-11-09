@@ -60,7 +60,7 @@ const Order = (props) => {
         {items.map((item, index) => (
           <div key={index}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div style={{ fontWeight: "bold" }}>{item.name}</div>
+              <div style={{ fontWeight: "bold" }}>{`${item.name}${item.quantity > 1 ? ` X${item.quantity}` : ""}`}</div>
               <div>{item.itemPrice}</div>
             </div>
             <ul>

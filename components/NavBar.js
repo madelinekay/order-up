@@ -122,6 +122,7 @@ const MainNavigation = () => {
 
 
           <div className={classes.menu}>
+            {/* <img src="https://img.icons8.com/external-icongeek26-outline-gradient-icongeek26/64/000000/external-menu-cafe-icongeek26-outline-gradient-icongeek26.png" height="30" /> */}
 
             <RestaurantMenuIcon
               color="inherit"

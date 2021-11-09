@@ -16,18 +16,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 const MenuItem = (props) => {
-  const { addItem } = useContext(CartContext)
   const classes = useStyles();
+  const { addItem } = useContext(CartContext)
   const [open, setOpen] = useState(false);
 
+  const openModal = () => setOpen(true);
 
-  const openModal = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -44,10 +39,3 @@ const MenuItem = (props) => {
 
 export default MenuItem;
 
-// const optionGroupOutput = {
-//   rice: [
-//     { name: "White rice", type: "rice", modifier: 0 },
-//     { name: "Brown rice", type: "rice", modifier: 1 },
-//   ],
-//   extras: [{ name: "Extra meat", type: "extras", modifier: 2 }],
-// };

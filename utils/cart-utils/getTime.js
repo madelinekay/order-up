@@ -1,6 +1,25 @@
-const balance = (stoveA, stoveB, orderKey, cart) => {
-  const [currentItem, ...remainingItems] = cart;
-  console.log("currentItem", currentItem);
+// fun () {
+//   const orderKey = name + Date.now();
+
+//     let stoveA = [],
+//       stoveB = [];
+//     for (const oldOrder of orders.filter((o) => o.status === "ongoing")) {
+//       const [orderReadyAt, updatedStoveA, updatedStoveB] = balance(
+//         stoveA,
+//         stoveB,
+//         orderKey,
+//         oldOrder.items.sort((a, b) => b.time - a.time)
+//       );
+//       stoveA = updatedStoveA;
+//       stoveB = updatedStoveB;
+
+// }
+
+
+
+const balance = (stoveA, stoveB, orderKey, items, timePlaced) => {
+  const [currentItem, ...remainingItems] = items;
+  console.log("currentItem", new Date, currentItem);
   const readyTimeA = stoveA.at(-1) ? stoveA.at(-1).orderReady : 0;
   const readyTimeB = stoveB.at(-1) ? stoveB.at(-1).orderReady : 0;
   const finalOrderA = stoveA.at(-1) ? stoveA.at(-1).order : "";
@@ -25,30 +44,32 @@ const balance = (stoveA, stoveB, orderKey, cart) => {
   }
 
   if (readyTimeA <= readyTimeB) {
-    if (readyTimeA < Date.now()) {
+    if (readyTimeA < timePlaced) {
       console.log(
-        "readyTimeA <= readyTimeB && readyTimeA < Date.now()",
+        "readyTimeA <= readyTimeB && readyTimeA < timePlaced",
         readyTimeA,
         [
           ...stoveA,
           {
             order: orderKey,
-            orderReady: Date.now() + currentItem.time * 60000,
+            orderReady: timePlaced + currentItem.time * 60000,
           },
         ],
-        stoveB
+        stoveB,
+        { timePlaced }
       );
       return balance(
         [
           ...stoveA,
           {
             order: orderKey,
-            orderReady: Date.now() + currentItem.time * 60000,
+            orderReady: timePlaced + currentItem.time * 60000,
           },
         ],
         stoveB,
         orderKey,
-        remainingItems
+        remainingItems,
+        timePlaced
       );
     } else {
       console.log(
@@ -62,7 +83,8 @@ const balance = (stoveA, stoveB, orderKey, cart) => {
           },
         ],
         stoveB,
-        currentItem.time
+        currentItem.time,
+        { timePlaced }
       );
       return balance(
         [
@@ -74,23 +96,25 @@ const balance = (stoveA, stoveB, orderKey, cart) => {
         ],
         stoveB,
         orderKey,
-        remainingItems
+        remainingItems,
+        timePlaced
       );
     }
   } else {
-    if (readyTimeB < Date.now()) {
+    if (readyTimeB < timePlaced) {
       console.log(
-        "readyTimeb <= readyTimea && readyTimeb < Date.now()",
+        "readyTimeb <= readyTimea && readyTimeb < timePlaced",
         readyTimeB,
         stoveA,
         [
           ...stoveB,
           {
             order: orderKey,
-            orderReady: Date.now() + currentItem.time * 60000,
+            orderReady: timePlaced + currentItem.time * 60000,
           },
         ],
-        currentItem.time
+        currentItem.time,
+        { timePlaced }
       );
       return balance(
         stoveA,
@@ -98,11 +122,12 @@ const balance = (stoveA, stoveB, orderKey, cart) => {
           ...stoveB,
           {
             order: orderKey,
-            orderReady: Date.now() + currentItem.time * 60000,
+            orderReady: timePlaced + currentItem.time * 60000,
           },
         ],
         orderKey,
-        remainingItems
+        remainingItems,
+        timePlaced
       );
     } else {
       console.log(
@@ -116,7 +141,8 @@ const balance = (stoveA, stoveB, orderKey, cart) => {
             orderReady: readyTimeB + currentItem.time * 60000,
           },
         ],
-        currentItem.time
+        currentItem.time,
+        { timePlaced }
       );
 
       return balance(
@@ -129,7 +155,8 @@ const balance = (stoveA, stoveB, orderKey, cart) => {
           },
         ],
         orderKey,
-        remainingItems
+        remainingItems,
+        timePlaced
       );
     }
   }
