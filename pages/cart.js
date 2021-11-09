@@ -23,18 +23,35 @@ const useStyles = makeStyles((theme) => ({
   input: {
     width: "80%",
     marginLeft: 10,
-
+    marginBottom: 20,
     color: theme.palette.primary.dark,
   },
   dialogue: {
     width: 400,
     backgroundColor: "white",
+    padding: 15,
   },
+  chip: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.dark,
+    border: `1px solid ${theme.palette.primary.dark}`,
+  }
+
 }));
 
 const Cart = () => {
   const { cart, total, addToOrders, deleteCartItem, editCartItem } = useContext(CartContext);
   const classes = useStyles();
+
+  let totalWithFees = 0
+  if (total < 5) {
+    totalWithFees = total + .5;
+  } else {
+    totalWithFees = total
+  }
+
+  const tax = totalWithFees * 0.065;
+  const totalPlusTax = (tax + totalWithFees).toFixed(2);
 
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
@@ -56,9 +73,9 @@ const Cart = () => {
     <div style={{ margin: "0 auto", width: 600, padding: 30 }}>
       {cart.length > 0 ? (
         <div style={{ padding: 20 }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Cart</div> <Chip label={`$${(total * 0.065 + total).toFixed(2)}`} />
-          </div>
+          {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div >Cart</div> <Chip className={classes.chip} label={`$${(total * 0.065 + total).toFixed(2)}`} />
+          </div> */}
           <div>
             <div>
               {cart.map((item, index) => (
@@ -89,7 +106,12 @@ const Cart = () => {
         aria-labelledby="form-dialog-title"
       >
         <div className={classes.dialogue}>
-          <DialogTitle>Complete Order</DialogTitle>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <DialogTitle>Complete Order</DialogTitle>
+            <Chip className={classes.chip} label={`$${totalPlusTax}`} />
+          </div>
+
+          {/* <DialogTitle>Complete Order</DialogTitle> */}
           <form onSubmit={(e) => {
             e.preventDefault()
             addToOrders(name)

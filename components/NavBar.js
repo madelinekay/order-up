@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import {
   AppBar,
   Toolbar,
   makeStyles,
   TextField,
   InputAdornment,
-
+  Typography
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -16,7 +16,7 @@ import { categories } from "../utils/data";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import SearchContext from "../utils/search-context";
-import MenuIcon from "@material-ui/icons/Menu";
+import KitchenIcon from '@material-ui/icons/Kitchen';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -81,13 +81,14 @@ const MainNavigation = () => {
   return (
     <AppBar position="sticky" className={classes.appbar}>
       <Toolbar className={classes.toolbar}>
-        <Link href="/">
-          <div className={classes.title}> Order Up | Thai Pavillion</div>
-        </Link>
+        <Typography className={classes.title}>
+          <Link href="/">
+            Order Up | Thai Pavillion
+          </Link>
+        </Typography>
         <div className={classes.search}>
           <TextField
-            placeholder="Search…"
-            name="s"
+            placeholder="Search menu"
             onChange={search}
             value={searchQuery}
             classes={{
@@ -154,7 +155,7 @@ const MainNavigation = () => {
           </Link>
 
           <Link href={"/orders"}>
-            <MenuIcon />
+            <KitchenIcon />
           </Link>
 
         </div>

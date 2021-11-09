@@ -127,16 +127,26 @@ export const CartContextProvider = (props) => {
 
   const addToOrders = async (name) => {
     const timeReadyMilliseconds = getTime(name);
-    const timeReady = new Date(timeReadyMilliseconds).toLocaleTimeString();
+
+    let totalWithFees = 0
+    if (total < 5) {
+      totalWithFees = total + .5;
+    } else {
+      totalWithFees = total
+    }
+
+    const tax = totalWithFees * 0.065;
+    const totalPlusTax = (tax + totalWithFees).toFixed(2);
 
     const order = {
       items: cart,
       timePlacedMilliseconds: Date.now(),
       timePlaced: new Date().toLocaleTimeString(
-        ([], { hour: "2-digit", minute: "2-digit" })
+        [], { hour: "2-digit", minute: "2-digit" }
       ),
-      timeReady,
-      total,
+      timeReady: new Date(timeReadyMilliseconds).toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" }),
+      tax: tax.toFixed(2),
+      totalPlusTax,
       name,
       status: "ongoing",
     };

@@ -1,30 +1,16 @@
-import { useContext } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import Card from "@material-ui/core/Card";
-import Link from "next/link";
-import { CardContent, makeStyles } from "@material-ui/core";
-import flatten from "lodash/flatten";
-
 import MenuItem from "../components/MenuItem";
-import data from "../utils/data";
 import SearchContext from "../utils/search-context";
 
+import { useContext } from "react";
+import Head from "next/head";
+
 export default function Home() {
-  // let transformed = [];
-  // Object.values(data).map((arr) => arr.map((item) => transformed.push(item)));
-
   const { filteredMenu } = useContext(SearchContext);
-
-  // map = [x, y, z] -> [fn(x), fn(y), fn(z)]
-  // reduce = [x, y, z] -> A
-
-  // const map = (array, fn) => array.reduce((acc, x) => [...acc, fn(x)], []);
 
   return (
     <div>
       <Head>
-        <title>Thai Mad-ness</title>
+        <title>Thai Pavillion</title>
         <meta name="description" content="Thai Pavillion order system." />
         <link rel="icon" href="/favicon.ico" />
       </Head>

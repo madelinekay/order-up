@@ -5,11 +5,16 @@ import { CardActions, Chip, IconButton, makeStyles } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   header: {
     fontSize: 5,
+  },
+  chip: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.dark,
+    border: `1px solid ${theme.palette.primary.dark}`,
   }
-})
+}))
 
 const cartItem = (props) => {
   const classes = useStyles();
@@ -22,7 +27,7 @@ const cartItem = (props) => {
       <CardHeader
         className={classes.header}
         title={`${name}${quantity > 1 ? ` X${quantity}` : ""}`}
-        action={<Chip label={`$${(itemPrice * quantity).toFixed(2)}`} style={{ fontSize: 15 }} />}
+        action={<Chip className={classes.chip} label={`$${(itemPrice * quantity).toFixed(2)}`} style={{ fontSize: 15 }} />}
       />
 
       <CardContent>

@@ -6,7 +6,7 @@ import data from "./data";
 const SearchContext = createContext({
   searchQuery: "",
   filteredMenu: [],
-  search: (e) => {},
+  search: (e) => { },
 });
 
 export const SearchContextProvider = (props) => {
@@ -17,7 +17,7 @@ export const SearchContextProvider = (props) => {
 
   const performSearch = (e) => {
     const value = e.target.value;
-    router.push("/?q=" + value);
+    router.push("/?q=" + encodeURIComponent(value));
   };
 
   useEffect(() => {

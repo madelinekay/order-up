@@ -31,11 +31,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Order = (props) => {
   const classes = useStyles();
-  const { items, name, timePlaced, total, id, status, timeReady } = props.order;
+  const { items, name, timePlaced, totalPlusTax, tax, id, status, timeReady } = props.order;
   const { markOrderComplete, deleteOrder } = useContext(CartContext);
-
-  const tax = total * 0.065;
-  const totalPlusTax = (tax + +total).toFixed(2);
 
   return (
     <Card
@@ -72,8 +69,8 @@ const Order = (props) => {
               {item.rice ? <li>{item.rice}</li> : null}
               {item.extras
                 ? item.extras.map((extra, index) => (
-                    <li key={index}>{extra}</li>
-                  ))
+                  <li key={index}>{extra}</li>
+                ))
                 : null}
               {item.stars ? <li>{`${item.stars} stars`}</li> : null}
               {item.notes ? <li>{item.notes}</li> : null}
@@ -88,7 +85,7 @@ const Order = (props) => {
           }}
         >
           <div>Tax:</div>
-          <div>{tax.toFixed(2)}</div>
+          <div>{tax}</div>
         </div>
         <div
           style={{
