@@ -84,7 +84,7 @@ const MainNavigation = () => {
       <Toolbar className={classes.toolbar}>
         <Typography className={classes.title}>
           <Link href="/">
-            Order Up | Thai Pavillion
+            Order Up | Thai Pavilion
           </Link>
         </Typography>
         <div className={classes.search}>

@@ -233,7 +233,7 @@ export const data = {
       makeOption("PxP", 2, "extras"),
       makeOption("VxV", 2, "extras"),
     ]),
-    makeItem("MIXED MEATS and bean thread", 13.95),
+    makeItem("MIXED MEATS and bean thread", 13.95, noodleFrOptions),
   ],
   FRice: [
     makeItem("Thai Fried Rice", 11.95, noodleFrOptions),
