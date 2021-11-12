@@ -135,7 +135,7 @@ export const CartContextProvider = (props) => {
       totalWithFees = total
     }
 
-    const tax = totalWithFees * 0.098;
+    const tax = totalWithFees * 0.094;
     const totalPlusTax = (tax + totalWithFees).toFixed(2);
 
     return { tax, totalPlusTax }
