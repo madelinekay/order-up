@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import {
   getDatabase,
@@ -12,7 +12,7 @@ import {
 } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import { balance } from "./cart-utils/getTime";
-import { ListItemIcon } from "@material-ui/core";
+import { number } from "yup/lib/locale";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA1oL-kZSAuizXIH5lCiGMJmxBqJ26ZMAk",
@@ -33,6 +33,7 @@ const ordersRef = ref(database, "recentOrders");
 const CartContext = createContext({
   cart: [],
   orders: [],
+  latestOrderReadyTime: number,
   // total: 0,
   addItem: (item) => { },
   addToOrders: () => { },
@@ -46,8 +47,8 @@ const CartContext = createContext({
 
 export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
-  // const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
+  const latestOrderReadyTime = useRef(0)
 
   const router = useRouter();
 
@@ -73,20 +74,19 @@ export const CartContextProvider = (props) => {
     const cartCopy = [...cart];
     cartCopy.splice(itemIndex, 1);
 
-    // setTotal((prevState) => prevState - item.itemPrice)
     setCart(cartCopy)
   }
 
   const editCartItem = (item, prevItem) => {
     const itemIndex = cart.findIndex(i => i.id === item.id)
+
     const cartCopy = [...cart]
     cartCopy.splice(itemIndex, 1, item)
 
-    // setTotal(prevState => prevState - prevItem.itemPrice + item.itemPrice)
     setCart(cartCopy)
   }
 
-  const getTime = (name) => {
+  const getTime = (name, scheduleTime) => {
     const currentOrderKey = name + Date.now();
 
 
@@ -96,17 +96,26 @@ export const CartContextProvider = (props) => {
     console.log('orders', filteredOrders);
     let stoveA = [],
       stoveB = [];
+    // fryer = [],
+    // oven = [],
+    // grill = [];
+
     for (const oldOrder of filteredOrders) {
-      const orderKey = name + Date.now();
-      const [orderReadyAt, updatedStoveA, updatedStoveB] = balance(
+      const orderKey = oldOrder.name + Date.now();
+      const [readyTime, updatedStoveA, updatedStoveB] = balance(
         stoveA,
         stoveB,
+        // fryer,
+        // oven,
+        // grill,
         orderKey,
         oldOrder.items.sort((a, b) => b.time - a.time),
-        oldOrder.timePlacedMilliseconds
+        oldOrder.timePlacedMilliseconds,
+        // oldOrder.scheduledTime
       );
       stoveA = updatedStoveA;
       stoveB = updatedStoveB;
+      // latestOrderReadyTime.current = readyTime;
     }
 
     const individualItems = cart
@@ -119,8 +128,11 @@ export const CartContextProvider = (props) => {
       stoveB,
       currentOrderKey,
       individualItems,
-      Date.now()
+      Date.now(),
+      // scheduledTime,
     );
+
+    latestOrderReadyTime.current = orderReady;
 
     return orderReady;
   };
@@ -137,7 +149,6 @@ export const CartContextProvider = (props) => {
 
     const tax = totalWithFees * 0.094;
     const totalPlusTax = (tax + totalWithFees).toFixed(2);
-
     return { tax, totalPlusTax }
   }
 
@@ -148,10 +159,10 @@ export const CartContextProvider = (props) => {
       debugger;
     }
     setCart((state) => [...state, item]);
-    // setTotal((prevState) => prevState + item.itemPrice * item.quantity);
   };
 
-  const addToOrders = async (name) => {
+  const addToOrders = async (name, scheduledTime = null) => {
+    //convert scheduledTime to milliseconds
     const timeReadyMilliseconds = getTime(name);
     const { tax, totalPlusTax } = calculateTotal();
 
@@ -170,10 +181,7 @@ export const CartContextProvider = (props) => {
     };
 
     await push(child(ref(database), "recentOrders"), order);
-
     setCart([]);
-    // setTotal(0);
-
     router.push("/Orders");
   };
 
@@ -196,7 +204,7 @@ export const CartContextProvider = (props) => {
   const contextValue = {
     cart,
     orders,
-    // total,
+    latestOrderReadyTime: latestOrderReadyTime.current,
     addItem,
     addToOrders,
     markOrderComplete,

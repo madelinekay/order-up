@@ -1,25 +1,8 @@
-// fun () {
-//   const orderKey = name + Date.now();
-
-//     let stoveA = [],
-//       stoveB = [];
-//     for (const oldOrder of orders.filter((o) => o.status === "ongoing")) {
-//       const [orderReadyAt, updatedStoveA, updatedStoveB] = balance(
-//         stoveA,
-//         stoveB,
-//         orderKey,
-//         oldOrder.items.sort((a, b) => b.time - a.time)
-//       );
-//       stoveA = updatedStoveA;
-//       stoveB = updatedStoveB;
-
-// }
-
-
-
 const balance = (stoveA, stoveB, orderKey, items, timePlaced) => {
   const [currentItem, ...remainingItems] = items;
   console.log("currentItem", new Date, currentItem);
+  console.log('stoveA', stoveA);
+  console.log('stoveB', stoveB);
   const readyTimeA = stoveA.at(-1) ? stoveA.at(-1).orderReady : 0;
   const readyTimeB = stoveB.at(-1) ? stoveB.at(-1).orderReady : 0;
   const finalOrderA = stoveA.at(-1) ? stoveA.at(-1).order : "";
@@ -42,6 +25,11 @@ const balance = (stoveA, stoveB, orderKey, items, timePlaced) => {
       return [readyTimeB, stoveA, stoveB];
     }
   }
+
+  // if (currentItem.name.includes("SATAY")) {
+  //   console.log('currentItem.satay', currentItem.satay);
+  //   return balance(stoveA, stoveB, [{ order: orderKey, orderReady: timePlaced + currentItem.time * 6000 }])
+  // }
 
   if (readyTimeA <= readyTimeB) {
     if (readyTimeA < timePlaced) {

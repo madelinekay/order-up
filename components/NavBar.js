@@ -1,4 +1,5 @@
 import { categories } from "../utils/data";
+import SearchContext from "../utils/search-context";
 
 import Link from "next/link";
 import { useContext, useState } from "react";
@@ -8,15 +9,14 @@ import {
   makeStyles,
   TextField,
   InputAdornment,
-  Typography
+  Typography,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import SearchIcon from "@material-ui/icons/Search";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import SearchContext from "../utils/search-context";
 import KitchenIcon from '@material-ui/icons/Kitchen';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,6 +70,7 @@ const MainNavigation = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -122,8 +123,6 @@ const MainNavigation = () => {
 
 
           <div className={classes.menu}>
-            {/* <img src="https://img.icons8.com/external-icongeek26-outline-gradient-icongeek26/64/000000/external-menu-cafe-icongeek26-outline-gradient-icongeek26.png" height="30" /> */}
-
             <RestaurantMenuIcon
               color="inherit"
               id="basic-button"
@@ -132,8 +131,6 @@ const MainNavigation = () => {
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
             />
-
-
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -150,7 +147,6 @@ const MainNavigation = () => {
               ))}
             </Menu>
           </div>
-
 
           <Link href={"/Cart"}>
             <ShoppingCartIcon />
