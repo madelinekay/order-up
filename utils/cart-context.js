@@ -161,9 +161,9 @@ export const CartContextProvider = (props) => {
     setCart((state) => [...state, item]);
   };
 
-  const addToOrders = async (name, scheduledTime = null) => {
-    //convert scheduledTime to milliseconds
-    const timeReadyMilliseconds = getTime(name);
+  const addToOrders = async (name, scheduledTime) => {
+
+    const timeReadyMilliseconds = getTime(name, scheduledTime);
     const { tax, totalPlusTax } = calculateTotal();
 
     const order = {

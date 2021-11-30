@@ -3,6 +3,7 @@ import ItemDialogForm from "../components/ItemDialogForm"
 import CartContext from "../utils/cart-context";
 
 import { useContext, useState } from "react";
+import { DateTime } from "luxon";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import {
@@ -50,10 +51,6 @@ const Cart = () => {
   const { cart, latestOrderReadyTime, addToOrders, deleteCartItem, editCartItem, calculateTotal } = useContext(CartContext);
   const classes = useStyles();
 
-  console.log('latestOrderReadyTime', latestOrderReadyTime);
-  console.log('Date.now()', Date.now());
-  console.log('latestOrderReadyTime > Date.now()', latestOrderReadyTime > Date.now());
-
   const { totalPlusTax } = calculateTotal();
 
   const [name, setName] = useState("");
@@ -80,12 +77,15 @@ const Cart = () => {
   };
 
   const handleTime = (event) => {
-    const enteredTime = event.target.value.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).slice(0, 5);
+    const enteredTime = event.target.value;
+    console.log('enteredTime', enteredTime);
     setTime(enteredTime)
   }
 
-  const placeholder = latestOrderReadyTime > Date.now() ? new Date(latestOrderReadyTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).slice(0, 5) : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }).slice(0, 5)
-  console.log('placeholder', placeholder);
+  const placeholder = latestOrderReadyTime > Date.now() ? DateTime.fromMillis(latestOrderReadyTime).toISO().slice(0, 16) : DateTime.now().toISO().slice(0, 16);
+
+  // var dt = DateTime;
+  // debugger
 
   return (
     <div style={{ margin: "0 auto", width: 600, padding: 30 }}>
@@ -128,7 +128,12 @@ const Cart = () => {
 
           <form onSubmit={(e) => {
             e.preventDefault()
-            addToOrders(name, time)
+            let scheduledTime = null;
+            if (time) {
+              scheduledTimeMilliseconds = DateTime.fromISO(time).toMillis();
+              console.log('scheduledTimeMilliseconds', scheduledTimeMilliseconds);
+            }
+            addToOrders(name, scheduledTimeMilliseconds)
           }}>
             <DialogContent>
               <TextField
