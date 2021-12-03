@@ -48,7 +48,7 @@ const CartContext = createContext({
 export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
-  const latestOrderReadyTime = useRef(0)
+  const [latestOrderReadyTime, setLatestOrderReadyTime] = useState(0)
 
   const router = useRouter();
 
@@ -86,7 +86,8 @@ export const CartContextProvider = (props) => {
     setCart(cartCopy)
   }
 
-  const getTime = (name, scheduleTime) => {
+  const getTime = (name, scheduledTime) => {
+    console.log('cart-context getTime')
     const currentOrderKey = name + Date.now();
 
 
@@ -111,7 +112,7 @@ export const CartContextProvider = (props) => {
         orderKey,
         oldOrder.items.sort((a, b) => b.time - a.time),
         oldOrder.timePlacedMilliseconds,
-        // oldOrder.scheduledTime
+        oldOrder.scheduledTime,
       );
       stoveA = updatedStoveA;
       stoveB = updatedStoveB;
@@ -129,10 +130,10 @@ export const CartContextProvider = (props) => {
       currentOrderKey,
       individualItems,
       Date.now(),
-      // scheduledTime,
+      scheduledTime,
     );
 
-    latestOrderReadyTime.current = orderReady;
+    setLatestOrderReadyTime(orderReady);
 
     return orderReady;
   };
@@ -204,7 +205,7 @@ export const CartContextProvider = (props) => {
   const contextValue = {
     cart,
     orders,
-    latestOrderReadyTime: latestOrderReadyTime.current,
+    latestOrderReadyTime: latestOrderReadyTime,
     addItem,
     addToOrders,
     markOrderComplete,

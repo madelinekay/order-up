@@ -1,6 +1,7 @@
 import CartItem from "../components/CartItem";
 import ItemDialogForm from "../components/ItemDialogForm"
 import CartContext from "../utils/cart-context";
+import { balance } from "../utils/cart-utils/getTime";
 
 import { useContext, useState } from "react";
 import { DateTime } from "luxon";
@@ -82,7 +83,21 @@ const Cart = () => {
     setTime(enteredTime)
   }
 
-  const placeholder = latestOrderReadyTime > Date.now() ? DateTime.fromMillis(latestOrderReadyTime).toISO().slice(0, 16) : DateTime.now().toISO().slice(0, 16);
+
+
+  const individualItems = cart
+    .map((item) => new Array(item.quantity).fill(item))
+    .reduce((acc, arr) => [...acc, ...arr], [])
+    .sort((a, b) => b.time - a.time);
+
+  console.log('Cart about to call balance')
+  const [readyTime] = balance([], [], 0, individualItems, Date.now())
+
+  const orderDuration = readyTime - Date.now();
+
+  const placeholder = latestOrderReadyTime > Date.now() ? DateTime.fromMillis(latestOrderReadyTime + orderDuration).toISO().slice(0, 16) : DateTime.now().toISO().slice(0, 16);
+
+  console.log('readyTime', readyTime);
 
   // var dt = DateTime;
   // debugger
@@ -128,7 +143,7 @@ const Cart = () => {
 
           <form onSubmit={(e) => {
             e.preventDefault()
-            let scheduledTime = null;
+            let scheduledTimeMilliseconds = null;
             if (time) {
               scheduledTimeMilliseconds = DateTime.fromISO(time).toMillis();
               console.log('scheduledTimeMilliseconds', scheduledTimeMilliseconds);
