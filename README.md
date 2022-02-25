@@ -11,6 +11,9 @@ Or filter menu by category.
 
 Customize customer preferences in the modal. 
 
+<img width="724" alt="Screen Shot 2022-02-25 at 1 25 04 PM" src="https://user-images.githubusercontent.com/61764962/155808342-44f9d8c6-dc33-473e-9999-9a1546f80d23.png">
+
+
 
 Navigate to cart to submit or edit customer order. 
 
