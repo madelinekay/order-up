@@ -6,6 +6,8 @@ Easily search for menu items on the homepage.
 
 
 Or filter menu by category. 
+<img width="1440" alt="Screen Shot 2022-02-25 at 1 24 03 PM" src="https://user-images.githubusercontent.com/61764962/155807241-aa0edaa6-16b0-40d6-8940-2fd9d1cc2304.png">
+
 
 
 Customize customer preferences in the modal. 
