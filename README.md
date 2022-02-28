@@ -16,6 +16,7 @@ Customize customer preferences in the modal.
 
 
 Navigate to cart to submit or edit customer order. 
+<img width="940" alt="Screen Shot 2022-02-27 at 4 19 12 PM" src="https://user-images.githubusercontent.com/61764962/155906406-8b77b1a7-37b8-48a1-a73f-03c65e7a051a.png">
 
 Schedule pick-up time for orders submitted in advance. 
 
