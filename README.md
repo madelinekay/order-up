@@ -21,3 +21,5 @@ Navigate to cart to submit or edit customer order.
 Schedule pick-up time for orders submitted in advance. 
 
 View orders appear in realtime from the kitchen. 
+<img width="1279" alt="Screen Shot 2022-02-25 at 1 26 13 PM" src="https://user-images.githubusercontent.com/61764962/155906451-6d723a83-3ef4-4028-b78b-e6ffa90e4fdc.png">
+
