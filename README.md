@@ -1,7 +1,7 @@
 
 Order-Up is a responsive web app that allows employees to customize, schedule, and submit orders. 
 
-Easily search for menu items on the homepage. 
+## Easily search for menu items on the homepage. ##
 <img width="1321" alt="Screen Shot 2022-02-25 at 1 23 41 PM" src="https://user-images.githubusercontent.com/61764962/155806856-50669670-c6d6-4781-a3cf-6d0d9368acbe.png">
 
 Customize customer preferences in the modal. 
