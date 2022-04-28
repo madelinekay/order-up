@@ -1,6 +1,6 @@
 # Order-Up
 
-Order-Up is a responsive web app that allows employees to customize, total, and submit orders. A capacity planning algorithm predicts both order completion time based on ongoing orders, and start time for orders submitted in advance. React, Next.js, Firebase, Formik, Material-UI, Yup validation, Jest.
+[Order-Up](https://thaipavilionorders.netlify.app/) is a responsive web app that allows employees to customize, total, and submit orders. A capacity planning algorithm predicts both order completion time based on ongoing orders, and start time for orders submitted in advance. React, Next.js, Firebase, Formik, Material-UI, Yup validation, Jest.
 
 ## Homepage
 ### Search for menu items in the searchbar or filter by category.
