@@ -61,7 +61,7 @@ const Order = (props) => {
           <div key={index}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ fontWeight: "bold" }}>{`${item.name}${item.quantity > 1 ? ` X${item.quantity}` : ""}`}</div>
-              <div>{item.itemPrice}</div>
+              <div>{`$${item.itemPrice * item.quantity}`}</div>
             </div>
             <ul>
               {item.protein ? <li>{item.protein}</li> : null}
@@ -84,7 +84,7 @@ const Order = (props) => {
           }}
         >
           <div>Tax:</div>
-          <div>{tax}</div>
+          <div>{`$${tax}`}</div>
         </div>
         <div
           style={{
@@ -95,7 +95,7 @@ const Order = (props) => {
           }}
         >
           <div>Total:</div>
-          <div>{totalPlusTax}</div>
+          <div>{`$${totalPlusTax}`}</div>
         </div>
       </CardContent>
       <div>

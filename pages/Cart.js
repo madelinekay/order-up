@@ -103,6 +103,7 @@ const Cart = () => {
   // debugger
 
   return (
+
     <div style={{ margin: "0 auto", width: 600, padding: 30 }}>
       {cart.length > 0 ? (
         <div style={{ padding: 20 }}>

@@ -10,9 +10,10 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Thai Pavillion</title>
-        <meta name="description" content="Thai Pavillion order system." />
+        <title>Thai Pavilion</title>
+        <meta name="description" content="Thai Pavilion order system." />
         <link rel="icon" href="/favicon.ico" />
+        <meta name="theme-color" content="#f9f2fe" />
       </Head>
       <div style={{ margin: "0 auto", maxWidth: 1200 }}>
         <div
