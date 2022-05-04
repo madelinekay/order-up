@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect, useRef } from "react";
+import { useState, createContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   getDatabase,
@@ -13,6 +13,14 @@ import {
 import { initializeApp } from "firebase/app";
 import { balance } from "./cart-utils/getTime";
 import { number } from "yup/lib/locale";
+// import calculateTime from "./cart-utils/balance-stoves";
+import { calculateTime } from "./cart-utils/balance-stoves";
+import { calculateOrderReadyTime } from "./cart-utils/calculateOrderReadyTime";
+
+//calculate ongoing order time in balance-stoves for sortedOldOrders[0]
+//  for app to function correctly chef must mark items complete, write separate function for submitting orders in advance
+// call orderReadyTime from cart to show when cart will be ready 
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyA1oL-kZSAuizXIH5lCiGMJmxBqJ26ZMAk",
@@ -48,7 +56,7 @@ const CartContext = createContext({
 export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [latestOrderReadyTime, setLatestOrderReadyTime] = useState(0)
+  // const [latestOrderReadyTime, setLatestOrderReadyTime] = useState(0)
 
   const router = useRouter();
 
@@ -91,51 +99,56 @@ export const CartContextProvider = (props) => {
     const currentOrderKey = name + Date.now();
 
 
-    const filteredOrders = orders.filter((o) => o.status === "ongoing").sort((a, b) => {
+    const sortedOldOrders = orders.filter((o) => o.status === "ongoing").sort((a, b) => {
       return a.timePlacedMilliseconds - b.timePlacedMilliseconds;
     })
     console.log('orders', filteredOrders);
-    let stoveA = [],
-      stoveB = [];
+    // let stoveA = [],
+    //   stoveB = [];
     // fryer = [],
     // oven = [],
     // grill = [];
 
-    for (const oldOrder of filteredOrders) {
-      const orderKey = oldOrder.name + Date.now();
-      const [readyTime, updatedStoveA, updatedStoveB] = balance(
-        stoveA,
-        stoveB,
-        // fryer,
-        // oven,
-        // grill,
-        orderKey,
-        oldOrder.items.sort((a, b) => b.time - a.time),
-        oldOrder.timePlacedMilliseconds,
-        oldOrder.scheduledTime,
-      );
-      stoveA = updatedStoveA;
-      stoveB = updatedStoveB;
-      // latestOrderReadyTime.current = readyTime;
-    }
+    // for (const oldOrder of filteredOrders) {
+    //   const orderKey = oldOrder.name + Date.now();
+    //   const [readyTime, updatedStoveA, updatedStoveB] =  calculateTime(
+    //     stoveA,
+    //     stoveB,
+    //     // fryer,
+    //     // oven,
+    //     // grill
+    //     oldOrder.items.sort((a, b) => b.time - a.time),
+    //     oldOrder.timePlacedMilliseconds,
+    //     oldOrder.scheduledTime,
+    //   );
+    //   stoveA = updatedStoveA;
+    //   stoveB = updatedStoveB;
+    //   // latestOrderReadyTime.current = readyTime;
+    // }
 
-    const individualItems = cart
+    const currentOrder = cart
       .map((item) => new Array(item.quantity).fill(item))
       .reduce((acc, arr) => [...acc, ...arr], [])
       .sort((a, b) => b.time - a.time);
 
-    const [orderReady, balancedStoveA, balancedStoveB] = balance(
-      stoveA,
-      stoveB,
-      currentOrderKey,
-      individualItems,
-      Date.now(),
-      scheduledTime,
+    const [orderReadyTimeMinutes] = calculateTime(
+      // stoveA,
+      // stoveB,
+      // currentOrderKey,
+      // individualItems,
+      // Date.now(),
+      // scheduledTime,
+      sortedOldOrders,
+      currentOrder,
     );
 
-    setLatestOrderReadyTime(orderReady);
 
-    return orderReady;
+
+    // setLatestOrderReadyTime(orderReady);
+
+    const [orderReadyTimeMilliseconds, orderReadyTimeString] = calculateOrderReadyTime(orderReadyTimeMinutes)
+
+    return [orderReadyTimeMilliseconds, orderReadyTimeString];
   };
 
   const calculateTotal = () => {
@@ -164,16 +177,15 @@ export const CartContextProvider = (props) => {
 
   const addToOrders = async (name, scheduledTime) => {
 
-    const timeReadyMilliseconds = getTime(name, scheduledTime);
+    const [timeReadyMilliseconds, timeReady] = getTime(name, scheduledTime);
     const { tax, totalPlusTax } = calculateTotal();
 
     const order = {
       items: cart,
-      timePlacedMilliseconds: Date.now(),
       timePlaced: new Date().toLocaleTimeString(
         [], { hour: "2-digit", minute: "2-digit" }
       ),
-      timeReady: new Date(timeReadyMilliseconds).toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" }),
+      timeReady,
       timeReadyMilliseconds,
       tax: tax.toFixed(2),
       totalPlusTax,
