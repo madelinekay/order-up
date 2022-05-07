@@ -1,4 +1,4 @@
-import { balanceItem, balanceOrder, calculateTime } from '../utils/cart-utils/balance-stoves';
+import { balanceItem, balanceOrder, calculateDuration } from '../utils/cart-utils/balance-stoves';
 import type { Item, Stove } from '../utils/cart-utils/balance-stoves';
 
 const menu: Record<string, Item> = {
@@ -70,7 +70,7 @@ describe('balanceOrder', () => {
 })
 
 // finally, calculate time
-describe('calculateTime', () => {
+describe('calculateDuration', () => {
     let stoveA: Stove = []
     let stoveB: Stove = []
 
@@ -87,7 +87,7 @@ describe('calculateTime', () => {
         // A: [fried rice, chicken curry, chicken curry, CHOW-MEIN] - 35
         // B: [chicken curry, fried rice, FRIED RICE] - 31
 
-        const minutes = calculateTime([orderA, orderB], incomingOrder)
+        const minutes = calculateDuration([orderA, orderB], incomingOrder)
 
         expect(minutes).toEqual(35)
     })
@@ -105,7 +105,7 @@ describe('calculateTime', () => {
         // A: [fried rice, fried rice, fried rice] - 36
         // B: [chow mein, chow mein, chow mein, CHICKEN CURRY] - 34
 
-        const minutes = calculateTime([orderA, orderB, orderC], incomingOrder)
+        const minutes = calculateDuration([orderA, orderB, orderC], incomingOrder)
 
         expect(minutes).toEqual(34)
     })
@@ -114,7 +114,7 @@ describe('calculateTime', () => {
         const orderA = [menu.friedRice]
         const incomingOrder = [menu.friedRice]
 
-        const minutes = calculateTime([orderA], incomingOrder)
+        const minutes = calculacalculateDurationteTime([orderA], incomingOrder)
 
         expect(minutes).toEqual(12)
     })

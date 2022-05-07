@@ -52,7 +52,7 @@ const Cart = () => {
   const { cart, latestOrderReadyTime, addToOrders, deleteCartItem, editCartItem, calculateTotal } = useContext(CartContext);
   const classes = useStyles();
 
-  const { totalPlusTax } = calculateTotal();
+  const [_tax, totalPlusTax] = calculateTotal();
 
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
@@ -90,17 +90,13 @@ const Cart = () => {
     .reduce((acc, arr) => [...acc, ...arr], [])
     .sort((a, b) => b.time - a.time);
 
-  console.log('Cart about to call balance')
+  // TODO: this is broken and used for scheduling
   const [readyTime] = balance([], [], 0, individualItems, Date.now())
 
   const orderDuration = readyTime - Date.now();
+  //write a separate function for this 
 
   const placeholder = latestOrderReadyTime > Date.now() ? DateTime.fromMillis(latestOrderReadyTime + orderDuration).toISO().slice(0, 16) : DateTime.now().toISO().slice(0, 16);
-
-  console.log('readyTime', readyTime);
-
-  // var dt = DateTime;
-  // debugger
 
   return (
 
