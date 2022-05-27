@@ -29,9 +29,6 @@ export const calculateDuration = (existingOrders, incomingOrder) => {
 	let stoveA = []
 	let stoveB = []
 	for (let order of existingOrders) {
-		for (let item of order) {
-			item.isNew = false;
-		}
 		[stoveA, stoveB] = balanceOrder(stoveA, stoveB, order)
 	}
 	[stoveA, stoveB] = balanceOrder(stoveA, stoveB, incomingOrder)

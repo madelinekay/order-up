@@ -38,28 +38,12 @@ const useStyles = makeStyles(() => ({
     icons: {
         color: theme.palette.primary.dark,
     },
-    chip: {
-        color: theme.palette.primary.dark,
-        backgroundColor: theme.palette.primary.main,
-        border: `1px solid ${theme.palette.primary.dark}`,
-    },
     button: {
         color: theme.palette.primary.dark,
-        backgroundColor: theme.palette.primary.main,
-        border: `1px solid ${theme.palette.primary.dark}`,
+        backgroundColor: theme.palette.secondary.dark,
+        border: `1px solid ${theme.palette.secondary.main}`,
     },
-    textField: { width: "90%" },
-    search: {
-        flex: 1,
-        marginLeft: 60,
-        marginRight: 140,
-        position: "relative",
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: theme.palette.primary.light,
-        "&:hover": {
-            backgroundColor: "#fdf4ff",
-        },
-    },
+
 }));
 
 const ItemDialogForm = (props) => {
@@ -322,10 +306,10 @@ const ItemDialogForm = (props) => {
                         <>
 
                             <div>
-                                {category !== "appetizers" &&
-                                    category !== "sides" &&
-                                    category !== "desserts" &&
-                                    category !== "drinks" ? (
+                                {category !== "Appetizers" &&
+                                    category !== "Sides" &&
+                                    category !== "Desserts" &&
+                                    category !== "Drinks" ? (
                                     [1, 2, 3, 4, 5].map((count) => (
                                         <IconButton
                                             key={count}
@@ -344,7 +328,7 @@ const ItemDialogForm = (props) => {
 
                             </div>
 
-                            <Button onClick={handleSubmit} className={classes.chip}>
+                            <Button onClick={handleSubmit} className={classes.button}>
                                 Add to cart
                             </Button>
                         </>

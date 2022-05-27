@@ -17,13 +17,13 @@ import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import SearchIcon from "@material-ui/icons/Search";
-import KitchenIcon from '@material-ui/icons/Kitchen';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
     backgroundColor: theme.palette.primary,
-    color: theme.palette.primary.dark,
-    border: `1px solid ${theme.palette.primary.dark}`,
+    color: theme.palette.primary.light,
+    borderBottom: `1px solid ${theme.palette.primary.dark}`,
+
   },
 
   toolbar: {
@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   title: {
-    color: "#70008e",
     fontWeight: "bold",
   },
 
@@ -42,20 +41,21 @@ const useStyles = makeStyles((theme) => ({
     width: 300,
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.primary.light,
-    "&:hover": {
-      backgroundColor: "#fdf4ff",
-    },
+    backgroundColor: "#FFFFFF",
+
   },
   searchIcon: {
     color: theme.palette.primary.dark,
   },
 
   inputRoot: {
-    color: "d128ff",
+
+    color: theme.palette.primary.dark
   },
   inputInput: {
-    backgroundColor: "#d128ff",
+
+    backgroundColor: theme.palette.primary.light,
+
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
@@ -78,6 +78,10 @@ const MainNavigation = () => {
     setAnchorEl(null);
   };
 
+  // const handleSearchClick = () => {
+  //   router.push("/appetizers")
+  // }
+
   const { search, searchQuery } = useContext(SearchContext);
 
   return (
@@ -91,6 +95,7 @@ const MainNavigation = () => {
         <div className={classes.search}>
           <TextField
             placeholder="Search menu"
+            // onClick={handleSearchClick}
             onChange={search}
             value={searchQuery}
             classes={{
@@ -150,10 +155,6 @@ const MainNavigation = () => {
 
           <Link href={"/Cart"}>
             <ShoppingCartIcon />
-          </Link>
-
-          <Link href={"/Orders"}>
-            <KitchenIcon />
           </Link>
 
         </div>

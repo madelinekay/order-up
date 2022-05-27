@@ -53,6 +53,7 @@ const CartContext = createContext({
 export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [latestOrderReadyTime, setLatestOrderReadyTime] = useState([0])
 
   const router = useRouter();
 
@@ -96,6 +97,7 @@ export const CartContextProvider = (props) => {
     })
     const existingOrderItems = sortedExistingOrders.map(order => order.items);
 
+
     const currentOrder = cart
       .map((item) => new Array(item.quantity).fill(item))
       .reduce((acc, arr) => [...acc, ...arr], [])
@@ -106,9 +108,18 @@ export const CartContextProvider = (props) => {
       currentOrder,
     );
 
-    const orderReadyTimeMilliseconds = Date.now() + orderDurationMinutes * 60_000
-    const orderReadyTimeString = new Date(orderReadyTimeMilliseconds).toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" })
+    let orderDurationAdjustment = 0
+    if (sortedExistingOrders.length > 0) {
+      orderDurationAdjustment = sortedExistingOrders[0].timeReadyMilliseconds - Date.now()
+      if (orderDurationAdjustment < 0) {
+        orderDurationAdjustment = 0;
+      }
+    }
 
+    const orderReadyTimeMilliseconds = (Date.now() + orderDurationMinutes * 60_000) - orderDurationAdjustment
+    console.log('orderReadyTimeMilliseconds', orderReadyTimeMilliseconds);
+    const orderReadyTimeString = new Date(orderReadyTimeMilliseconds).toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" })
+    setLatestOrderReadyTime(orderReadyTimeMilliseconds);
     return [orderReadyTimeMilliseconds, orderReadyTimeString];
   };
 
@@ -174,7 +185,7 @@ export const CartContextProvider = (props) => {
   const contextValue = {
     cart,
     orders,
-    // latestOrderReadyTime,
+    latestOrderReadyTime,
     addItem,
     addToOrders,
     markOrderComplete,

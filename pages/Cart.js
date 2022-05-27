@@ -1,7 +1,7 @@
 import CartItem from "../components/CartItem";
 import ItemDialogForm from "../components/ItemDialogForm"
 import CartContext from "../utils/cart-context";
-import { balance } from "../utils/cart-utils/getTime";
+import { calculateDuration } from "../utils/cart-utils/balance-stoves";
 
 import { useContext, useState } from "react";
 import { DateTime } from "luxon";
@@ -24,9 +24,9 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.dark,
     color: theme.palette.primary.dark,
-    border: `1px solid ${theme.palette.primary.dark}`,
+    border: `1px solid ${theme.palette.secondary.main}`,
     float: "right",
   },
   input: {
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 15,
   },
   chip: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.dark,
     color: theme.palette.primary.dark,
     border: `1px solid ${theme.palette.primary.dark}`,
   }
@@ -91,9 +91,11 @@ const Cart = () => {
     .sort((a, b) => b.time - a.time);
 
   // TODO: this is broken and used for scheduling
-  const [readyTime] = balance([], [], 0, individualItems, Date.now())
+  const scheduledOrderDuration = calculateDuration([], individualItems)
+  //or just reduce, might be cleaner
 
-  const orderDuration = readyTime - Date.now();
+  const orderDuration = scheduledOrderDuration * 60_000 + Date.now();
+
   //write a separate function for this 
 
   const placeholder = latestOrderReadyTime > Date.now() ? DateTime.fromMillis(latestOrderReadyTime + orderDuration).toISO().slice(0, 16) : DateTime.now().toISO().slice(0, 16);
@@ -157,7 +159,7 @@ const Cart = () => {
                 value={name}
                 onChange={(event) => handleName(event)}
               />
-              {false && <div>
+              <div>
                 {schedule ? (
                   <TextField
                     type="datetime-local"
@@ -176,7 +178,7 @@ const Cart = () => {
                     <ExpandMoreIcon />
                   </Button>
                 )}
-              </div>}
+              </div>
               {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <Grid container justifyContent="space-around">
                   <KeyboardDatePicker

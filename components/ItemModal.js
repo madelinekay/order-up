@@ -97,10 +97,10 @@ const ItemModal = (props) => {
           <DialogActions>
             <div style={{ display: "flex" }}>
               <div>
-                {category !== "appetizers" &&
-                  category !== "sides" &&
-                  category !== "desserts" &&
-                  category !== "drinks"
+                {category !== "Appetizers" &&
+                  category !== "Sides" &&
+                  category !== "Desserts" &&
+                  category !== "Drinks"
                   ? [1, 2, 3, 4, 5].map((count) => (
                     <IconButton
                       key={count}
