@@ -75,8 +75,11 @@ const MainNavigation = () => {
 
 
   const routeToMenu = () => {
-    // TODO: check if already on menu, if so, do nothing, if not:
-    router.push("/Menu")
+    const location = router.asPath
+
+    if (!location.includes("Menu")) {
+      router.push("/Menu")
+    }
   }
 
   const { search, searchQuery } = useContext(SearchContext);

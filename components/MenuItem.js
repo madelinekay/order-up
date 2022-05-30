@@ -9,7 +9,7 @@ import AddIcon from '@material-ui/icons/Add'; import { useContext } from "react"
 
 
 const MenuItem = (props) => {
-  const classes = useStyles();
+
   const { addItem } = useContext(CartContext)
   const [open, setOpen] = useState(false);
 
@@ -28,7 +28,7 @@ const MenuItem = (props) => {
         <CardHeader title={props.item.name}
           action={
             <Chip
-              className={classes.chip}
+              // className={classes.chip}
               label={`$${props.item.price.toFixed(2)}`}
             />
           } />
@@ -42,7 +42,7 @@ const MenuItem = (props) => {
             padding: 12,
             color: "#084",
           }}
-        ><Button variant='outlined' color='primary' className={classes.button} startIcon={<AddIcon />}>Add</Button></div></div>
+        ><Button variant='outlined' color='primary' startIcon={<AddIcon />}>Add</Button></div></div>
       </Card>
 
     </>
