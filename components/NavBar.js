@@ -1,7 +1,8 @@
-import { categories } from "../utils/data";
+
 import SearchContext from "../utils/search-context";
 
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import {
   AppBar,
@@ -70,17 +71,13 @@ const MainNavigation = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const router = useRouter()
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
-  // const handleSearchClick = () => {
-  //   router.push("/appetizers")
-  // }
+  const routeToMenu = () => {
+    // TODO: check if already on menu, if so, do nothing, if not:
+    router.push("/Menu")
+  }
 
   const { search, searchQuery } = useContext(SearchContext);
 
@@ -95,7 +92,7 @@ const MainNavigation = () => {
         <div className={classes.search}>
           <TextField
             placeholder="Search menu"
-            // onClick={handleSearchClick}
+            onClick={routeToMenu}
             onChange={search}
             value={searchQuery}
             classes={{
@@ -126,32 +123,12 @@ const MainNavigation = () => {
             <HomeIcon />
           </Link>
 
-
-          <div className={classes.menu}>
+          <Link href="/Menu">
             <RestaurantMenuIcon
               color="inherit"
               id="basic-button"
-              aria-controls="basic-menu"
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
             />
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              {categories.map((category) => (
-                <Link href={"/" + category} key={category}>
-                  <MenuItem onClick={handleClose}>{category}</MenuItem>
-                </Link>
-              ))}
-            </Menu>
-          </div>
+          </Link>
 
           <Link href={"/Cart"}>
             <ShoppingCartIcon />

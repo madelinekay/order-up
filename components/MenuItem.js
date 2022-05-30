@@ -1,26 +1,12 @@
 import ItemDialogForm from "./ItemDialogForm";
 import CartContext from "../utils/cart-context";
-import theme from "../styles/theme";
+
 
 import { useState } from "react";
-import { makeStyles, Button, Card, CardContent, CardHeader, CardActions, Chip } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import { useContext } from "react";
+import { Button, Card, CardContent, CardHeader, CardActions, Chip } from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add'; import { useContext } from "react";
 
 
-const useStyles = makeStyles(() => ({
-  button: {
-    // color: theme.palette.primary.light,
-    // backgroundColor: theme.palette.secondary.main,
-    // border: `1px solid ${theme.palette.secondary.main}`,
-  },
-  chip: {
-    // margin: 20,
-    // color: theme.palette.primary.dark,
-    // border: `1px solid ${theme.palette.secondary.main}`,
-  }
-}));
 
 const MenuItem = (props) => {
   const classes = useStyles();
@@ -47,7 +33,7 @@ const MenuItem = (props) => {
             />
           } />
         <CardContent style={{ flex: 1 }}><ul>
-          {props.item.ingredients.map(ingredient => <li>{ingredient}</li>)}</ul></CardContent>
+          {props.item.ingredients ? props.item.ingredients.map((ingredient, index) => <li key={index}>{ingredient}</li>) : null}</ul></CardContent>
         <div><div
           style={{
             display: "inline-block",
@@ -56,7 +42,7 @@ const MenuItem = (props) => {
             padding: 12,
             color: "#084",
           }}
-        ><Button className={classes.button}><KeyboardArrowDownIcon /></Button></div></div>
+        ><Button variant='outlined' color='primary' className={classes.button} startIcon={<AddIcon />}>Add</Button></div></div>
       </Card>
 
     </>

@@ -3,6 +3,7 @@ import theme from "../styles/theme";
 import React, { useState } from "react";
 import * as yup from "yup";
 import IconButton from "@material-ui/core/IconButton";
+import AddIcon from '@material-ui/icons/Add';
 import { useFormik } from "formik";
 import { FormHelperText } from "@material-ui/core";
 import Radio from "@material-ui/core/Radio";
@@ -38,12 +39,6 @@ const useStyles = makeStyles(() => ({
     icons: {
         color: theme.palette.primary.dark,
     },
-    button: {
-        color: theme.palette.primary.dark,
-        backgroundColor: theme.palette.secondary.dark,
-        border: `1px solid ${theme.palette.secondary.main}`,
-    },
-
 }));
 
 const ItemDialogForm = (props) => {
@@ -328,8 +323,8 @@ const ItemDialogForm = (props) => {
 
                             </div>
 
-                            <Button onClick={handleSubmit} className={classes.button}>
-                                Add to cart
+                            <Button variant='contained' color='primary' onClick={handleSubmit} startIcon={<AddIcon />}>
+                                Add to Cart
                             </Button>
                         </>
                     </DialogActions>

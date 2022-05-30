@@ -21,12 +21,12 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import AddIcon from '@material-ui/icons/Add';
+
+
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    backgroundColor: theme.palette.secondary.dark,
-    color: theme.palette.primary.dark,
-    border: `1px solid ${theme.palette.secondary.main}`,
     float: "right",
   },
   input: {
@@ -102,7 +102,7 @@ const Cart = () => {
 
   return (
 
-    <div style={{ margin: "0 auto", width: 600, padding: 30 }}>
+    <div style={{ margin: "0 auto", width: 600, padding: 30, marginTop: 75 }}>
       {cart.length > 0 ? (
         <div style={{ padding: 20 }}>
           <div>
@@ -114,7 +114,10 @@ const Cart = () => {
           </div>
           <div>
             <Button
+              startIcon={<AddIcon />}
               type="button"
+              variant="contained"
+              color="primary"
               className={classes.button}
               onClick={handleOpen}
               style={{ marginTop: 30 }}
@@ -210,8 +213,10 @@ const Cart = () => {
 
             <DialogActions>
               <Button
+                variant="contained"
+                color="primary"
                 type="submit"
-                className={classes.button}
+              // className={classes.button}
               >
                 Confirm
               </Button>
