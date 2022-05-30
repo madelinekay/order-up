@@ -1,25 +1,26 @@
 import { createTheme } from "@material-ui/core";
 
 const theme = createTheme({
+
   palette: {
     primary: {
-      main: "#f5d2ff",
-      dark: "#70008e",
-      light: "#f9e3ff",
+      main: "#303D74",
+      dark: "#06113F",
+      light: "#FFFFFF",
     },
     secondary: {
-      main: "#70008e",
+      main: "#848BA8",
+      dark: "#e0e0e0"
     },
-    ternary: {
-      main: "#eeffee",
-      dark: "#084",
-    },
+
   },
   typography: {
     h2: {
       fontWeight: "bold"
     }
   }
+
 });
+
 
 export default theme;

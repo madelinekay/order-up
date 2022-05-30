@@ -1,6 +1,8 @@
-import { categories } from "../utils/data";
+
+import SearchContext from "../utils/search-context";
 
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import {
   AppBar,
@@ -8,22 +10,21 @@ import {
   makeStyles,
   TextField,
   InputAdornment,
-  Typography
+  Typography,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import SearchIcon from "@material-ui/icons/Search";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import SearchContext from "../utils/search-context";
-import KitchenIcon from '@material-ui/icons/Kitchen';
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
     backgroundColor: theme.palette.primary,
-    color: theme.palette.primary.dark,
-    border: `1px solid ${theme.palette.primary.dark}`,
+    color: theme.palette.primary.light,
+    borderBottom: `1px solid ${theme.palette.primary.dark}`,
+
   },
 
   toolbar: {
@@ -34,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   title: {
-    color: "#70008e",
     fontWeight: "bold",
   },
 
@@ -42,20 +42,21 @@ const useStyles = makeStyles((theme) => ({
     width: 300,
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.primary.light,
-    "&:hover": {
-      backgroundColor: "#fdf4ff",
-    },
+    backgroundColor: "#FFFFFF",
+
   },
   searchIcon: {
     color: theme.palette.primary.dark,
   },
 
   inputRoot: {
-    color: "d128ff",
+
+    color: theme.palette.primary.dark
   },
   inputInput: {
-    backgroundColor: "#d128ff",
+
+    backgroundColor: theme.palette.primary.light,
+
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
@@ -70,12 +71,16 @@ const MainNavigation = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const router = useRouter()
+
+
+  const routeToMenu = () => {
+    const location = router.asPath
+
+    if (!location.includes("Menu")) {
+      router.push("/Menu")
+    }
+  }
 
   const { search, searchQuery } = useContext(SearchContext);
 
@@ -90,6 +95,7 @@ const MainNavigation = () => {
         <div className={classes.search}>
           <TextField
             placeholder="Search menu"
+            onClick={routeToMenu}
             onChange={search}
             value={searchQuery}
             classes={{
@@ -120,44 +126,15 @@ const MainNavigation = () => {
             <HomeIcon />
           </Link>
 
-
-          <div className={classes.menu}>
-            {/* <img src="https://img.icons8.com/external-icongeek26-outline-gradient-icongeek26/64/000000/external-menu-cafe-icongeek26-outline-gradient-icongeek26.png" height="30" /> */}
-
+          <Link href="/Menu">
             <RestaurantMenuIcon
               color="inherit"
               id="basic-button"
-              aria-controls="basic-menu"
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
             />
-
-
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              {categories.map((category) => (
-                <Link href={"/" + category} key={category}>
-                  <MenuItem onClick={handleClose}>{category}</MenuItem>
-                </Link>
-              ))}
-            </Menu>
-          </div>
-
+          </Link>
 
           <Link href={"/Cart"}>
             <ShoppingCartIcon />
-          </Link>
-
-          <Link href={"/Orders"}>
-            <KitchenIcon />
           </Link>
 
         </div>

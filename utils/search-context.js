@@ -17,16 +17,13 @@ export const SearchContextProvider = (props) => {
 
   const performSearch = (e) => {
     const value = e.target.value;
-    router.push("/?q=" + encodeURIComponent(value));
+    router.push("/Menu?q=" + encodeURIComponent(value));
   };
 
   useEffect(() => {
-    const searchResults = data.reduce((acc, item) => {
-      if (item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-        acc.push(item);
-      }
-      return acc;
-    }, []);
+    const searchResults = data.filter((item) => {
+      return item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    });
 
     setFilteredMenu(searchResults);
   }, [searchQuery]);

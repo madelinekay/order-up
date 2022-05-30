@@ -1,17 +1,17 @@
+import { useContext } from 'react'
 import MenuItem from "../components/MenuItem";
+import SearchContext from "../utils/search-context";
+
 import data from "../utils/data";
 
 import { useRouter } from "next/router";
 
-const Category = () => {
+const Menu = () => {
     const router = useRouter();
-    const { category } = router.query;
-
-    if (!category) {
-        return null;
-    }
+    const { filteredMenu } = useContext(SearchContext);
 
     return (
+
         <div style={{ margin: "0 auto", maxWidth: 1200 }}>
             <div
                 style={{
@@ -22,10 +22,12 @@ const Category = () => {
                     gridGap: 20,
                 }}
             >
-                {data.filter(item => item.category === category).map(item => <MenuItem key={item} item={item} category={category.toString()} />)}
+                {filteredMenu.map((item) => {
+                    return <MenuItem key={item.name} item={item} />;
+                })}
             </div>
         </div>
     );
 };
 
-export default Category;
+export default Menu;

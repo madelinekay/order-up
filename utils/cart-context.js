@@ -11,8 +11,13 @@ import {
   remove,
 } from "firebase/database";
 import { initializeApp } from "firebase/app";
-import { balance } from "./cart-utils/getTime";
-import { ListItemIcon } from "@material-ui/core";
+import { number } from "yup/lib/locale";
+import { calculateDuration } from "./cart-utils/balance-stoves";
+
+//calculate ongoing order time in balance-stoves for sortedOldOrders[0]
+//  for app to function correctly chef must mark items complete, write separate function for submitting orders in advance
+// call orderReadyTime from cart to show when cart will be ready 
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyA1oL-kZSAuizXIH5lCiGMJmxBqJ26ZMAk",
@@ -33,6 +38,7 @@ const ordersRef = ref(database, "recentOrders");
 const CartContext = createContext({
   cart: [],
   orders: [],
+  latestOrderReadyTime: number,
   // total: 0,
   addItem: (item) => { },
   addToOrders: () => { },
@@ -46,8 +52,8 @@ const CartContext = createContext({
 
 export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
-  // const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
+  const [latestOrderReadyTime, setLatestOrderReadyTime] = useState([0])
 
   const router = useRouter();
 
@@ -73,56 +79,48 @@ export const CartContextProvider = (props) => {
     const cartCopy = [...cart];
     cartCopy.splice(itemIndex, 1);
 
-    // setTotal((prevState) => prevState - item.itemPrice)
     setCart(cartCopy)
   }
 
   const editCartItem = (item, prevItem) => {
     const itemIndex = cart.findIndex(i => i.id === item.id)
+
     const cartCopy = [...cart]
     cartCopy.splice(itemIndex, 1, item)
 
-    // setTotal(prevState => prevState - prevItem.itemPrice + item.itemPrice)
     setCart(cartCopy)
   }
 
-  const getTime = (name) => {
-    const currentOrderKey = name + Date.now();
-
-
-    const filteredOrders = orders.filter((o) => o.status === "ongoing").sort((a, b) => {
+  const calculateReadyTime = (name, scheduledTime) => {
+    const sortedExistingOrders = orders.filter((o) => o.status === "ongoing").sort((a, b) => {
       return a.timePlacedMilliseconds - b.timePlacedMilliseconds;
     })
-    console.log('orders', filteredOrders);
-    let stoveA = [],
-      stoveB = [];
-    for (const oldOrder of filteredOrders) {
-      const orderKey = name + Date.now();
-      const [orderReadyAt, updatedStoveA, updatedStoveB] = balance(
-        stoveA,
-        stoveB,
-        orderKey,
-        oldOrder.items.sort((a, b) => b.time - a.time),
-        oldOrder.timePlacedMilliseconds
-      );
-      stoveA = updatedStoveA;
-      stoveB = updatedStoveB;
-    }
+    const existingOrderItems = sortedExistingOrders.map(order => order.items);
 
-    const individualItems = cart
+
+    const currentOrder = cart
       .map((item) => new Array(item.quantity).fill(item))
       .reduce((acc, arr) => [...acc, ...arr], [])
       .sort((a, b) => b.time - a.time);
 
-    const [orderReady, balancedStoveA, balancedStoveB] = balance(
-      stoveA,
-      stoveB,
-      currentOrderKey,
-      individualItems,
-      Date.now()
+    const orderDurationMinutes = calculateDuration(
+      existingOrderItems,
+      currentOrder,
     );
 
-    return orderReady;
+    let orderDurationAdjustment = 0
+    if (sortedExistingOrders.length > 0) {
+      orderDurationAdjustment = sortedExistingOrders[0].timeReadyMilliseconds - Date.now()
+      if (orderDurationAdjustment < 0) {
+        orderDurationAdjustment = 0;
+      }
+    }
+
+    const orderReadyTimeMilliseconds = (Date.now() + orderDurationMinutes * 60_000) - orderDurationAdjustment
+    console.log('orderReadyTimeMilliseconds', orderReadyTimeMilliseconds);
+    const orderReadyTimeString = new Date(orderReadyTimeMilliseconds).toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" })
+    setLatestOrderReadyTime(orderReadyTimeMilliseconds);
+    return [orderReadyTimeMilliseconds, orderReadyTimeString];
   };
 
   const calculateTotal = () => {
@@ -137,31 +135,25 @@ export const CartContextProvider = (props) => {
 
     const tax = totalWithFees * 0.094;
     const totalPlusTax = (tax + totalWithFees).toFixed(2);
-
-    return { tax, totalPlusTax }
+    return [tax, totalPlusTax]
   }
 
 
   const addItem = (item) => {
-    if (window.DEBUG) {
-      const itemIndex = cart.findIndex(item => item.id === itemId)
-      debugger;
-    }
     setCart((state) => [...state, item]);
-    // setTotal((prevState) => prevState + item.itemPrice * item.quantity);
   };
 
-  const addToOrders = async (name) => {
-    const timeReadyMilliseconds = getTime(name);
-    const { tax, totalPlusTax } = calculateTotal();
+  const addToOrders = async (name, scheduledTime) => {
 
+    const [timeReadyMilliseconds, timeReady] = calculateReadyTime(name, scheduledTime);
+    const [tax, totalPlusTax] = calculateTotal();
     const order = {
       items: cart,
-      timePlacedMilliseconds: Date.now(),
       timePlaced: new Date().toLocaleTimeString(
         [], { hour: "2-digit", minute: "2-digit" }
       ),
-      timeReady: new Date(timeReadyMilliseconds).toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" }),
+      timePlacedMilliseconds: Date.now(),
+      timeReady,
       timeReadyMilliseconds,
       tax: tax.toFixed(2),
       totalPlusTax,
@@ -170,11 +162,8 @@ export const CartContextProvider = (props) => {
     };
 
     await push(child(ref(database), "recentOrders"), order);
-
     setCart([]);
-    // setTotal(0);
-
-    router.push("/Orders");
+    router.push("/");
   };
 
   const markOrderComplete = (id) => {
@@ -196,7 +185,7 @@ export const CartContextProvider = (props) => {
   const contextValue = {
     cart,
     orders,
-    // total,
+    latestOrderReadyTime,
     addItem,
     addToOrders,
     markOrderComplete,
