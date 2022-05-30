@@ -162,7 +162,7 @@ const Cart = () => {
                 value={name}
                 onChange={(event) => handleName(event)}
               />
-              <div>
+              {/* <div>
                 {schedule ? (
                   <TextField
                     type="datetime-local"
@@ -181,7 +181,7 @@ const Cart = () => {
                     <ExpandMoreIcon />
                   </Button>
                 )}
-              </div>
+              </div> */}
               {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <Grid container justifyContent="space-around">
                   <KeyboardDatePicker

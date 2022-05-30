@@ -163,7 +163,7 @@ export const CartContextProvider = (props) => {
 
     await push(child(ref(database), "recentOrders"), order);
     setCart([]);
-    router.push("/Orders");
+    router.push("/");
   };
 
   const markOrderComplete = (id) => {
