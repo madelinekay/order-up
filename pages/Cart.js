@@ -20,7 +20,6 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AddIcon from '@material-ui/icons/Add';
 
 
@@ -28,6 +27,7 @@ import AddIcon from '@material-ui/icons/Add';
 const useStyles = makeStyles((theme) => ({
   button: {
     float: "right",
+    marginBottom: 75,
   },
   input: {
     width: "80%",
@@ -45,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.dark,
     border: `1px solid ${theme.palette.primary.dark}`,
   }
-
 }));
 
 const Cart = () => {
@@ -83,25 +82,19 @@ const Cart = () => {
     setTime(enteredTime)
   }
 
-
-
   const individualItems = cart
     .map((item) => new Array(item.quantity).fill(item))
     .reduce((acc, arr) => [...acc, ...arr], [])
     .sort((a, b) => b.time - a.time);
 
-  // TODO: this is broken and used for scheduling
+  // TODO: rewrite scheduling to be used with new algorithm
   const scheduledOrderDuration = calculateDuration([], individualItems)
   //or just reduce, might be cleaner
 
   const orderDuration = scheduledOrderDuration * 60_000 + Date.now();
-
-  //write a separate function for this 
-
   const placeholder = latestOrderReadyTime > Date.now() ? DateTime.fromMillis(latestOrderReadyTime + orderDuration).toISO().slice(0, 16) : DateTime.now().toISO().slice(0, 16);
 
   return (
-
     <div style={{ margin: "0 auto", width: 600, padding: 30, marginTop: 75 }}>
       {cart.length > 0 ? (
         <div style={{ padding: 20 }}>
@@ -129,9 +122,13 @@ const Cart = () => {
       ) : (
         <div>Cart is empty</div>
       )}
-
-      {editItem ? <ItemDialogForm onAdd={(cartItem, prevItem) => editCartItem(cartItem, prevItem)} onClose={closeEdit} open={!!editItem} item={editItem} /> : null}
-
+      {editItem ?
+        <ItemDialogForm
+          onAdd={(cartItem, prevItem) => editCartItem(cartItem, prevItem)}
+          onClose={closeEdit}
+          open={!!editItem}
+          item={editItem} />
+        : null}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -142,7 +139,6 @@ const Cart = () => {
             <DialogTitle>Complete Order</DialogTitle>
             <Chip className={classes.chip} label={`$${totalPlusTax}`} />
           </div>
-
           <form onSubmit={(e) => {
             e.preventDefault()
             let scheduledTimeMilliseconds = null;
@@ -210,13 +206,11 @@ const Cart = () => {
                 </Grid>
               </MuiPickersUtilsProvider> */}
             </DialogContent>
-
             <DialogActions>
               <Button
                 variant="contained"
                 color="primary"
                 type="submit"
-              // className={classes.button}
               >
                 Confirm
               </Button>

@@ -1,17 +1,12 @@
-import { useContext } from 'react'
 import MenuItem from "../components/MenuItem";
 import SearchContext from "../utils/search-context";
 
-import data from "../utils/data";
-
-import { useRouter } from "next/router";
+import { useContext } from 'react'
 
 const Menu = () => {
-    const router = useRouter();
     const { filteredMenu } = useContext(SearchContext);
 
     return (
-
         <div style={{ margin: "0 auto", maxWidth: 1200 }}>
             <div
                 style={{

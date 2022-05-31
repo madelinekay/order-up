@@ -24,20 +24,12 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles(() => ({
-    menuItem: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-    },
     proteins: {
         display: "flex",
         flexDirection: "column",
         flexWrap: "wrap",
         height: 150,
         width: 400,
-    },
-    icons: {
-        color: theme.palette.primary.dark,
     },
 }));
 
@@ -53,7 +45,7 @@ const ItemDialogForm = (props) => {
         quantity: 1,
     }
     const item = { ...itemDefaults, ...props.item }
-    const { options = [], name, price, category, time } = item; //these may not be in item, and if they are, some fields may not exist 
+    const { options = [], name, price, category, time } = item;
     const classes = useStyles();
 
     const groupedOptions = options.reduce((acc, option) => {
@@ -181,7 +173,7 @@ const ItemDialogForm = (props) => {
                                         <FormHelperText>{errors.rice}</FormHelperText>
                                     ) : null}
                                     <RadioGroup
-                                        className={classes.rice}
+                                        // className={classes.rice}
                                         style={{
                                             display: "flex",
                                             flexDirection: "row",

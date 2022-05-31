@@ -1,3 +1,5 @@
+import { calculateDuration } from "./cart-utils/balance-stoves";
+
 import { useState, createContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
@@ -12,12 +14,6 @@ import {
 } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import { number } from "yup/lib/locale";
-import { calculateDuration } from "./cart-utils/balance-stoves";
-
-//calculate ongoing order time in balance-stoves for sortedOldOrders[0]
-//  for app to function correctly chef must mark items complete, write separate function for submitting orders in advance
-// call orderReadyTime from cart to show when cart will be ready 
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyA1oL-kZSAuizXIH5lCiGMJmxBqJ26ZMAk",
@@ -31,7 +27,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const database = getDatabase(app);
 const ordersRef = ref(database, "recentOrders");
 
@@ -39,7 +34,6 @@ const CartContext = createContext({
   cart: [],
   orders: [],
   latestOrderReadyTime: number,
-  // total: 0,
   addItem: (item) => { },
   addToOrders: () => { },
   fetchOrders: () => { },
@@ -54,7 +48,6 @@ export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
   const [latestOrderReadyTime, setLatestOrderReadyTime] = useState([0])
-
   const router = useRouter();
 
   useEffect(() => {
@@ -78,16 +71,13 @@ export const CartContextProvider = (props) => {
     const itemIndex = cart.findIndex(i => i.id === item.id)
     const cartCopy = [...cart];
     cartCopy.splice(itemIndex, 1);
-
     setCart(cartCopy)
   }
 
   const editCartItem = (item, prevItem) => {
     const itemIndex = cart.findIndex(i => i.id === item.id)
-
     const cartCopy = [...cart]
     cartCopy.splice(itemIndex, 1, item)
-
     setCart(cartCopy)
   }
 
@@ -95,9 +85,8 @@ export const CartContextProvider = (props) => {
     const sortedExistingOrders = orders.filter((o) => o.status === "ongoing").sort((a, b) => {
       return a.timePlacedMilliseconds - b.timePlacedMilliseconds;
     })
+
     const existingOrderItems = sortedExistingOrders.map(order => order.items);
-
-
     const currentOrder = cart
       .map((item) => new Array(item.quantity).fill(item))
       .reduce((acc, arr) => [...acc, ...arr], [])
@@ -117,7 +106,6 @@ export const CartContextProvider = (props) => {
     }
 
     const orderReadyTimeMilliseconds = (Date.now() + orderDurationMinutes * 60_000) - orderDurationAdjustment
-    console.log('orderReadyTimeMilliseconds', orderReadyTimeMilliseconds);
     const orderReadyTimeString = new Date(orderReadyTimeMilliseconds).toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" })
     setLatestOrderReadyTime(orderReadyTimeMilliseconds);
     return [orderReadyTimeMilliseconds, orderReadyTimeString];
@@ -125,8 +113,8 @@ export const CartContextProvider = (props) => {
 
   const calculateTotal = () => {
     const total = cart.reduce((acc, item) => acc + (item.itemPrice * item.quantity), 0)
-
     let totalWithFees = 0
+
     if (total < 5) {
       totalWithFees = total + .5;
     } else {
@@ -138,13 +126,11 @@ export const CartContextProvider = (props) => {
     return [tax, totalPlusTax]
   }
 
-
   const addItem = (item) => {
     setCart((state) => [...state, item]);
   };
 
   const addToOrders = async (name, scheduledTime) => {
-
     const [timeReadyMilliseconds, timeReady] = calculateReadyTime(name, scheduledTime);
     const [tax, totalPlusTax] = calculateTotal();
     const order = {
@@ -204,13 +190,3 @@ export const CartContextProvider = (props) => {
 };
 
 export default CartContext;
-
-// extras is an array
-
-// onValue = ref + callback
-// internally, firebase tracks this via:
-// let listerners
-// onValue(ref, cb) = {
-//   listeners.push([ref, cb])
-// }
-// onSocketData((data) => { if (data.ref === ref) { cb(data} })

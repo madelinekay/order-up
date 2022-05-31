@@ -1,7 +1,8 @@
-import { useState, useEffect, createContext } from "react";
-import { useRouter } from "next/router";
 
 import data from "./data";
+
+import { useState, useEffect, createContext } from "react";
+import { useRouter } from "next/router";
 
 const SearchContext = createContext({
   searchQuery: "",
@@ -12,7 +13,6 @@ const SearchContext = createContext({
 export const SearchContextProvider = (props) => {
   const [filteredMenu, setFilteredMenu] = useState([]);
   const router = useRouter();
-
   const searchQuery = router.query.q || "";
 
   const performSearch = (e) => {

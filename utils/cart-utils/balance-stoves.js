@@ -1,12 +1,7 @@
-import { number, StringSchema } from "yup";
-
-
 export const balanceOrder = (stoveA, stoveB, order) => {
-	// copy stoves so stoves don't get mutated
 	stoveA = [...stoveA]
 	stoveB = [...stoveB]
 	order = [...order]
-
 
 	let totalMinutesStoveA = stoveA.reduce((acc, item) => acc += item.time, 0)
 	let totalMinutesStoveB = stoveB.reduce((acc, item) => acc += item.time, 0)

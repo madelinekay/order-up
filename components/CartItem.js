@@ -54,23 +54,4 @@ const CartItem = (props) => {
 
 export default CartItem;
 
-// <div>
-// <div>
-//   <div style={{ float: "right" }}>{`$${(itemPrice * quantity).toFixed(
-//     2
-//   )}`}</div>
-//   <div style={{ fontWeight: "bold" }}>{`${name}${
-//     quantity > 1 ? ` X${quantity}` : ""
-//   }`}</div>
-// </div>
 
-// <ul>
-//   {protein ? <li>{protein}</li> : null}
-//   {rice ? <li>{rice}</li> : null}
-//   {extras.map((extra) => (
-//     <li key={extra}>{extra}</li>
-//   ))}
-//   {stars ? <li>{`${stars} stars`}</li> : null}
-//   {notes ? <li>{notes}</li> : null}
-// </ul>
-// </div>

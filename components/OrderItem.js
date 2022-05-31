@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
   },
   chipCompleted: {
     color: theme.palette.primary.dark,
-
     backgroundColor: theme.palette.secondary.dark,
     border: `1px solid ${theme.palette.primary.dark}`,
   },
@@ -56,7 +55,6 @@ const Order = (props) => {
           />
         }
       />
-
       <CardContent style={{ flexGrow: 2 }}>
         {items.map((item, index) => (
           <div key={index}>
@@ -119,7 +117,6 @@ const Order = (props) => {
             <CheckIcon />
           </div>
         )}
-
         <IconButton className={classes.icons} onClick={() => deleteOrder(id)}>
           <DeleteIcon />
         </IconButton>
