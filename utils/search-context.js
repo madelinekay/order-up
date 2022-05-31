@@ -17,7 +17,7 @@ export const SearchContextProvider = (props) => {
 
   const performSearch = (e) => {
     const value = e.target.value;
-    router.push("/Menu?q=" + encodeURIComponent(value));
+    router.push("/?q=" + encodeURIComponent(value));
   };
 
   useEffect(() => {

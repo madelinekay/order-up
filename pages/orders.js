@@ -6,9 +6,10 @@ import { useContext } from "react";
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        backgroundColor: theme.palette.secondary.dark,
+        backgroundColor: theme.palette.ternary.dark,
         color: theme.palette.primary.dark,
-        border: `1px solid ${theme.palette.secondary.main}`,
+        border: `1px solid ${theme.palette.ternary.main}`,
+        marginBottom: 75
     },
     grid: {
         padding: 30,

@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 5,
   },
   chip: {
-    backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: theme.palette.ternary.dark,
     color: theme.palette.primary.dark,
     border: `1px solid ${theme.palette.primary.dark}`,
   }

@@ -15,17 +15,24 @@ import { useContext } from "react";
 const useStyles = makeStyles((theme) => ({
   chipOngoing: {
     color: theme.palette.primary.dark,
-    backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: theme.palette.ternary.dark,
     border: `1px solid ${theme.palette.primary.dark}`,
   },
   chipCompleted: {
     color: theme.palette.primary.dark,
-    backgroundColor: theme.palette.secondary.dark,
+    // color: "white",
+    backgroundColor: theme.palette.ternary.dark,
     border: `1px solid ${theme.palette.primary.dark}`,
   },
   icons: {
     float: "right",
   },
+  iconCompleted: {
+    display: "inline-block",
+    float: "right",
+    padding: 12,
+    color: theme.palette.secondary.light,
+  }
 }));
 
 const Order = (props) => {
@@ -107,12 +114,7 @@ const Order = (props) => {
           </IconButton>
         ) : (
           <div
-            style={{
-              display: "inline-block",
-              float: "right",
-              padding: 12,
-              color: "#06113F",
-            }}
+            className={classes.iconCompleted}
           >
             <CheckIcon />
           </div>

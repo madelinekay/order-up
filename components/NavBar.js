@@ -1,5 +1,6 @@
 
 import SearchContext from "../utils/search-context";
+import CartContext from "../utils/cart-context";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -12,6 +13,8 @@ import {
   TextField,
   InputAdornment,
   Typography,
+  Tooltip,
+  Badge
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -47,14 +50,18 @@ const useStyles = makeStyles((theme) => ({
 
 const MainNavigation = () => {
   const { search, searchQuery } = useContext(SearchContext);
+  const { cart, orders } = useContext(CartContext)
   const classes = useStyles();
   const router = useRouter()
 
+  const ongoingOrders = orders.filter(order => order.status == "ongoing")
+
   const routeToMenu = () => {
     const location = router.asPath
+    console.log("location", location)
 
-    if (!location.includes("Menu")) {
-      router.push("/Menu")
+    if (location == "/orders" || location == "/cart") {
+      router.push("/")
     }
   }
 
@@ -95,19 +102,29 @@ const MainNavigation = () => {
           }}
         >
           <Link href="/">
-            {/* <IconButton> */}
-            <HomeIcon />
-            {/* </IconButton> */}
-
+            <Tooltip title="menu">
+              <IconButton color="inherit">
+                <HomeIcon />
+              </IconButton>
+            </Tooltip>
           </Link>
-          <Link href="/Menu">
-            <RestaurantMenuIcon
-              color="inherit"
-              id="basic-button"
-            />
+          <Link href="/cart">
+            <Tooltip title="cart">
+              <IconButton color="inherit">
+                <Badge badgeContent={cart.length} color="secondary">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
           </Link>
-          <Link href={"/Cart"}>
-            <ShoppingCartIcon />
+          <Link href="/orders">
+            <Tooltip title="orders">
+              <IconButton color="inherit">
+                <Badge badgeContent={ongoingOrders.length} color="secondary">
+                  <RestaurantMenuIcon id="basic-button" />
+                </Badge>
+              </IconButton>
+            </Tooltip>
           </Link>
         </div>
       </Toolbar>

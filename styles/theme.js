@@ -8,10 +8,13 @@ const theme = createTheme({
       light: "#FFFFFF",
     },
     secondary: {
+      main: "#cc0000",
+      light: "#008000"
+    },
+    ternary: {
       main: "#848BA8",
       dark: "#e0e0e0"
-    },
-
+    }
   },
   typography: {
     h2: {

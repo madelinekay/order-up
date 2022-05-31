@@ -149,7 +149,7 @@ export const CartContextProvider = (props) => {
 
     await push(child(ref(database), "recentOrders"), order);
     setCart([]);
-    router.push("/");
+    router.push("/orders");
   };
 
   const markOrderComplete = (id) => {
@@ -161,7 +161,7 @@ export const CartContextProvider = (props) => {
   const addToArchive = async () => {
     await push(child(ref(database), "archivedOrders"), orders);
     await remove(ordersRef);
-    router.push("/");
+    router.push("/orders");
   };
 
   const deleteOrder = (id) => {

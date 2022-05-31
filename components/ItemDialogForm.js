@@ -155,7 +155,7 @@ const ItemDialogForm = (props) => {
                                         <FormControlLabel
                                             key={index}
                                             value={option.name}
-                                            control={<Radio />}
+                                            control={<Radio color="primary" />}
                                             label={option.name}
                                             name="protein"
                                             checked={option.name === values.protein}
@@ -173,23 +173,23 @@ const ItemDialogForm = (props) => {
                                         <FormHelperText>{errors.rice}</FormHelperText>
                                     ) : null}
                                     <RadioGroup
-                                        // className={classes.rice}
+
                                         style={{
                                             display: "flex",
                                             flexDirection: "row",
                                             columnGap: 26,
+
                                         }}
                                     >
                                         {groupedOptions.rice.map((option, index) => (
                                             <FormControlLabel
                                                 key={index}
                                                 value={option.name}
-                                                control={<Radio />}
+                                                control={<Radio color="primary" />}
                                                 label={option.name}
                                                 name="rice"
                                                 onChange={handleChange}
                                                 checked={option.name === values.rice}
-
                                             />
                                         ))}
                                     </RadioGroup>
@@ -209,7 +209,7 @@ const ItemDialogForm = (props) => {
 
                                             <FormControlLabel
                                                 key={index}
-                                                control={<Checkbox />}
+                                                control={<Checkbox color="primary" />}
                                                 value={option.name}
                                                 label={option.name}
                                                 checked={values.extras.includes(option.name)}

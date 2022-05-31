@@ -4,6 +4,7 @@ import CartContext from "../utils/cart-context";
 import { calculateDuration } from "../utils/cart-utils/balance-stoves";
 
 import { useContext, useState } from "react";
+import Link from "next/link";
 import { DateTime } from "luxon";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -19,6 +20,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
+  Typography,
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 
@@ -41,9 +43,13 @@ const useStyles = makeStyles((theme) => ({
     padding: 15,
   },
   chip: {
-    backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: theme.palette.ternary.dark,
     color: theme.palette.primary.dark,
     border: `1px solid ${theme.palette.primary.dark}`,
+  },
+  span: {
+    textDecoration: "underline",
+    '&:hover': { cursor: "pointer" }
   }
 }));
 
@@ -120,7 +126,12 @@ const Cart = () => {
           </div>
         </div>
       ) : (
-        <div>Cart is empty</div>
+        <div>Cart is empty, return to <Link href="/">
+          <span className={classes.span}>
+            menu
+          </span>
+        </Link>
+        </div>
       )}
       {editItem ?
         <ItemDialogForm
