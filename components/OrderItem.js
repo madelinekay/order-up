@@ -46,9 +46,10 @@ const Order = (props) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        padding: 20
       }}
     >
-      <CardHeader
+      {/* <CardHeader
         title={name}
         subheader={timePlaced}
         action={
@@ -61,23 +62,37 @@ const Order = (props) => {
             label={status === "ongoing" ? timeReady : "Completed"}
           />
         }
-      />
+      /> */}
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 20 }}>
+        <div style={{ lineHeight: 1.6 }}>
+          <div style={{ fontSize: 24 }}>{name}</div>
+          <div style={{ fontSize: 16, color: "#747474" }}>{timePlaced}</div>
+        </div>
+        <Chip
+          className={
+            status === "completed"
+              ? classes.chipCompleted
+              : classes.chipOngoing
+          }
+          label={status === "ongoing" ? timeReady : "Completed"}
+        />
+      </div>
       <CardContent style={{ flexGrow: 2 }}>
         {items.map((item, index) => (
           <div key={index}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div style={{ fontWeight: "bold" }}>{`${item.name}${item.quantity > 1 ? ` X${item.quantity}` : ""}`}</div>
-              <div>{`$${item.itemPrice * item.quantity}`}</div>
+              <div style={{ fontWeight: "bold" }}>{`${item.name}${item.quantity > 1 ? ` (${item.quantity})` : ""}`}</div>
+              <div>{`$${(item.itemPrice * item.quantity).toFixed(2)}`}</div>
             </div>
             <ul>
               {item.protein ? <li>{item.protein}</li> : null}
-              {item.rice ? <li>{item.rice}</li> : null}
+              {item.rice ? <li>{`${item.rice} rice`}</li> : null}
+              {item.stars ? <li>{`${item.stars} stars`}</li> : null}
               {item.extras
                 ? item.extras.map((extra, index) => (
                   <li key={index}>{extra}</li>
                 ))
                 : null}
-              {item.stars ? <li>{`${item.stars} stars`}</li> : null}
               {item.notes ? <li>{item.notes}</li> : null}
             </ul>
           </div>
