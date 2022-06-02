@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-block",
     float: "right",
     padding: 12,
-    color: theme.palette.secondary.light,
+    color: theme.palette.secondary.dark,
   }
 }));
 

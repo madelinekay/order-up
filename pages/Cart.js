@@ -21,6 +21,7 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
   Typography,
+  Alert
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 
@@ -107,7 +108,7 @@ const Cart = () => {
           <div>
             <div>
               {cart.map((item, index) => (
-                <CartItem key={index} item={item} onOpen={() => openEdit(item)} delete={() => deleteCartItem(item)} />
+                <CartItem key={index} item={item} cart={cart} onOpen={() => openEdit(item)} delete={() => deleteCartItem(item)} />
               ))}
             </div>
           </div>

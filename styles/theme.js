@@ -9,7 +9,8 @@ const theme = createTheme({
     },
     secondary: {
       main: "#cc0000",
-      light: "#008000"
+      light: "#F0F7ED",
+      dark: "#314827"
     },
     ternary: {
       main: "#848BA8",

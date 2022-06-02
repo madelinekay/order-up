@@ -14,6 +14,7 @@ import {
 } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import { number } from "yup/lib/locale";
+import { boolean } from "yup";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA1oL-kZSAuizXIH5lCiGMJmxBqJ26ZMAk",
@@ -33,6 +34,7 @@ const ordersRef = ref(database, "recentOrders");
 const CartContext = createContext({
   cart: [],
   orders: [],
+  open: boolean,
   latestOrderReadyTime: number,
   addItem: (item) => { },
   addToOrders: () => { },
@@ -42,12 +44,14 @@ const CartContext = createContext({
   deleteCartItem: () => { },
   editCartItem: () => { },
   calculateTotal: () => { },
+  closeSnackbar: () => { }
 });
 
 export const CartContextProvider = (props) => {
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
   const [latestOrderReadyTime, setLatestOrderReadyTime] = useState([0])
+  const [open, setOpen] = useState(false)
   const router = useRouter();
 
   useEffect(() => {
@@ -67,6 +71,10 @@ export const CartContextProvider = (props) => {
     });
   }, []);
 
+  const closeSnackbar = () => {
+    setOpen(false)
+  }
+
   const deleteCartItem = (item) => {
     const itemIndex = cart.findIndex(i => i.id === item.id)
     const cartCopy = [...cart];
@@ -77,6 +85,8 @@ export const CartContextProvider = (props) => {
   const editCartItem = (item, prevItem) => {
     const itemIndex = cart.findIndex(i => i.id === item.id)
     const cartCopy = [...cart]
+
+    console.log("item", item, item.quantity)
     cartCopy.splice(itemIndex, 1, item)
     setCart(cartCopy)
   }
@@ -128,6 +138,7 @@ export const CartContextProvider = (props) => {
 
   const addItem = (item) => {
     setCart((state) => [...state, item]);
+    setOpen(true)
   };
 
   const addToOrders = async (name, scheduledTime) => {
@@ -171,6 +182,7 @@ export const CartContextProvider = (props) => {
   const contextValue = {
     cart,
     orders,
+    open,
     latestOrderReadyTime,
     addItem,
     addToOrders,
@@ -180,6 +192,7 @@ export const CartContextProvider = (props) => {
     deleteCartItem,
     editCartItem,
     calculateTotal,
+    closeSnackbar
   };
 
   return (

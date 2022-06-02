@@ -122,6 +122,7 @@ const ItemDialogForm = (props) => {
 
                 props.onAdd(cartItem, item);
                 props.onClose();
+                props.openAlert(cartItem);
             },
         });
 
