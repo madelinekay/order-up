@@ -31,6 +31,7 @@ const useStyles = makeStyles(() => ({
         height: 150,
         width: 400,
     },
+    proteinForm: { borderBottom: `solid ${theme.palette.ternary.dark} ` }
 }));
 
 const ItemDialogForm = (props) => {
@@ -145,7 +146,7 @@ const ItemDialogForm = (props) => {
                 <form onSubmit={handleSubmit}>
                     <DialogContent>
                         {groupedOptions.protein ? (
-                            <FormControl error={!!errors.protein}>
+                            <FormControl error={!!errors.protein} className={classes.proteinForm}>
                                 {errors.protein ? (
                                     <FormHelperText>{errors.protein}</FormHelperText>
                                 ) : null}
@@ -167,7 +168,7 @@ const ItemDialogForm = (props) => {
                             </FormControl>
                         ) : null}
 
-                        <div style={{ display: "flex", flexDirection: "column" }}>
+                        <div style={{ display: "flex", flexDirection: "column", marginTop: 25 }}>
                             {groupedOptions.rice ? (
                                 <FormControl error={!!errors.rice}>
                                     {errors.rice ? (
@@ -178,16 +179,17 @@ const ItemDialogForm = (props) => {
                                         style={{
                                             display: "flex",
                                             flexDirection: "row",
-                                            columnGap: 26,
+                                            gap: 12,
 
                                         }}
                                     >
                                         {groupedOptions.rice.map((option, index) => (
                                             <FormControlLabel
+
                                                 key={index}
                                                 value={option.name}
                                                 control={<Radio color="primary" />}
-                                                label={option.name}
+                                                label={`${option.name} rice`}
                                                 name="rice"
                                                 onChange={handleChange}
                                                 checked={option.name === values.rice}
@@ -316,7 +318,7 @@ const ItemDialogForm = (props) => {
 
                             </div>
 
-                            <Button variant='contained' color='primary' onClick={handleSubmit} startIcon={<AddIcon />}>
+                            <Button variant='contained' color='primary' onClick={handleSubmit} startIcon={<AddIcon />} disableElevation >
                                 Add to Cart
                             </Button>
                         </>

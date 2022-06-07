@@ -47,7 +47,7 @@ const MenuItem = (props) => {
       <ItemDialogForm open={open} onAdd={addItem} openAlert={props.openAlert}
         onClose={handleClose} item={props.item}
         style={{ margin: "auto", width: 550 }} />
-      <Card onClick={openModal} style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+      <Card variant="outlined" onClick={openModal} style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
         {/* <CardHeader title={props.item.name}
           action={<Chip className={classes.chip} label={`$${props.item.price.toFixed(2)}`} />} /> */}
         <header style={{

@@ -14,13 +14,21 @@ import { useContext, useState } from "react";
 import CartContext from "../utils/cart-context";
 
 const useStyles = makeStyles((theme) => ({
+  cartItem: {
+    padding: 10,
+    borderBottom: "solid #dddddd",
+    marginBottom: 15,
+    '&:last-of-type': {
+      borderBottom: 0
+    }
+  },
   header: {
     fontSize: 5,
   },
   chip: {
-    backgroundColor: theme.palette.ternary.dark,
-    color: theme.palette.primary.dark,
-    border: `1px solid ${theme.palette.primary.dark}`,
+    // backgroundColor: theme.palette.primary.light,
+    // color: theme.palette.primary.dark,
+    // border: `1px solid ${theme.palette.primary.dark}`,
   },
   CardContent: {
     color: "#424242",
@@ -31,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: 0
     }
   },
+  icon: {
+    color: theme.palette.primary.dark
+  }
 }))
 
 // const Accordion = withStyles({
@@ -81,17 +92,17 @@ const CartItem = (props) => {
     editCartItem({ ...props.item, quantity: quantity - 1 }, props.item)
   }
   return (
-    <Card style={{ marginBottom: 30, padding: 20 }}>
+    <div className={classes.cartItem}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 20 }}>
-        <header><strong>{name}</strong></header>
-        <Chip className={classes.chip} label={`$${(itemPrice * quantity).toFixed(2)}`} style={{ fontSize: 15 }} />
+        <strong>{name}</strong>
+        <div className={classes.chip} style={{ fontSize: 15 }} >{`$${(itemPrice * quantity).toFixed(2)}`} </div>
       </div>
 
-      <CardContent
+      <div
         className={classes.CardContent}
       >
 
-        {protein || rice || extras || stars || notes ? <strong>Item details:</strong> : null}
+        {/* {protein || rice || extras || stars || notes ? <strong>Item details:</strong> : null} */}
         <ul>
           {protein ? <li><strong>Protein: </strong>{` ${protein}`}</li> : null}
           {rice ? <li><strong>Rice: </strong>{` ${rice}`}</li> : null}
@@ -105,8 +116,8 @@ const CartItem = (props) => {
         </ul>
 
 
-      </CardContent>
-      <CardActions style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: 20 }}>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: 10 }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <IconButton disabled={quantity == 1 ? true : false} onClick={handleDecrementQuantity}><IndeterminateCheckBoxIcon /></IconButton>
           <strong>{quantity}</strong>
@@ -120,8 +131,9 @@ const CartItem = (props) => {
             <DeleteIcon />
           </IconButton>
         </div>
-      </CardActions>
-    </Card>
+      </div>
+      {/* <hr /> */}
+    </div>
   );
 };
 

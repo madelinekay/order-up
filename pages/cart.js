@@ -17,14 +17,17 @@ import {
   DialogActions,
   Chip,
   Button,
+  Paper,
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
   Typography,
-  Alert
+  Alert,
+  IconButton
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
-
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import { TheatersOutlined } from "@material-ui/icons";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,16 +35,27 @@ const useStyles = makeStyles((theme) => ({
     float: "right",
     marginBottom: 75,
   },
-  input: {
-    width: "80%",
-    marginLeft: 10,
-    marginBottom: 20,
+  orderName: {
+    borderRadius: theme.shape.borderRadius,
     color: theme.palette.primary.dark,
-  },
-  dialogue: {
-    width: 400,
     backgroundColor: "white",
-    padding: 15,
+    padding: 8,
+    display: 'block',
+    flex: 1,
+    marginRight: 15
+    // borderTopRightRadius: 0,
+    // borderBottomRightRadius: 0
+  },
+  orderPlaceButton: {
+    // borderTopLeftRadius: 0,
+    // borderBottomLeftRadius: 0
+    // border: `solid black`,
+  },
+  orderSummary: {
+    width: 400,
+    backgroundColor: "#e8eaf6",
+    padding: 20,
+    marginTop: 20
   },
   chip: {
     backgroundColor: theme.palette.ternary.dark,
@@ -51,6 +65,18 @@ const useStyles = makeStyles((theme) => ({
   span: {
     textDecoration: "underline",
     '&:hover': { cursor: "pointer" }
+  },
+  cart: {
+    padding: 20,
+    width: 600,
+    // backgroundColor: "#f6f6f6",
+    // color: theme.palette.primary.dark,
+    border: `solid #dddddd`,
+    marginTop: 20,
+  },
+  iconButton: {
+    color: theme.palette.primary.main,
+    backgroundColor: "white"
   }
 }));
 
@@ -58,7 +84,8 @@ const Cart = () => {
   const { cart, latestOrderReadyTime, addToOrders, deleteCartItem, editCartItem, calculateTotal } = useContext(CartContext);
   const classes = useStyles();
 
-  const [_tax, totalPlusTax] = calculateTotal();
+
+  const [tax, totalPlusTax] = calculateTotal();
 
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
@@ -101,39 +128,90 @@ const Cart = () => {
   const orderDuration = scheduledOrderDuration * 60_000 + Date.now();
   const placeholder = latestOrderReadyTime > Date.now() ? DateTime.fromMillis(latestOrderReadyTime + orderDuration).toISO().slice(0, 16) : DateTime.now().toISO().slice(0, 16);
 
+  // bg = f6f6f6, border: = dddddd
+
   return (
-    <div style={{ margin: "0 auto", width: 600, padding: 30, marginTop: 75 }}>
-      {cart.length > 0 ? (
-        <div style={{ padding: 20 }}>
-          <div>
-            <div>
-              {cart.map((item, index) => (
-                <CartItem key={index} item={item} cart={cart} onOpen={() => openEdit(item)} delete={() => deleteCartItem(item)} />
-              ))}
+    <div style={{ margin: "0 auto", padding: 30, marginTop: 30, }}>
+
+      <div style={{ width: 1200, margin: "0 auto" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: 50, }}>
+          {cart.length > 0 ? (
+            <>
+              <div>
+                <strong style={{ fontSize: 20 }}>{`Cart (${cart.length} item${cart.length > 1 ? "s" : ""})`}</strong>
+                <Paper className={classes.cart} variant="outlined">
+
+                  {cart.map((item, index) => (
+                    <CartItem key={index} item={item} cart={cart} onOpen={() => openEdit(item)} delete={() => deleteCartItem(item)} />
+                  ))}
+
+
+                </Paper>
+                <div style={{ textAlign: 'center', marginTop: 32 }}>
+                  <Link href="/">
+                    <Button className={classes.IconButton} startIcon={<AddIcon />} color="primary">Add more items</Button>
+                  </Link>
+                </div>
+              </div>
+              <div>
+                <strong style={{ fontSize: 20 }}>&nbsp;</strong>
+                <Paper variant="outlined" className={classes.orderSummary}>
+                  <form onSubmit={(e) => {
+                    e.preventDefault()
+                    let scheduledTimeMilliseconds = null;
+                    if (time) {
+                      scheduledTimeMilliseconds = DateTime.fromISO(time).toMillis();
+                      console.log('scheduledTimeMilliseconds', scheduledTimeMilliseconds);
+                    }
+                    addToOrders(name, scheduledTimeMilliseconds)
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <strong style={{ fontSize: 20 }}>Order Summary</strong>
+                      {/* <Link href="/cart">
+                        <Button className={classes.IconButton} startIcon={<AddIcon />} color="primary" style={{ backgroundColor: "white" }}>Add more items</Button>
+                      </Link> */}
+                    </div>
+                    <ul style={{ lineHeight: 2 }}>
+                      <li><strong>Tax: </strong>{` $${tax.toFixed(2)}`}</li>
+                      <li> <strong>Total: </strong>{` $${totalPlusTax}`}</li>
+                    </ul>
+
+                    <div style={{ display: 'flex' }}>
+
+                      <TextField
+                        className={classes.orderName}
+                        InputProps={{ disableUnderline: true }}
+                        size="small"
+                        id="name"
+                        placeholder="Enter name..."
+                        value={name}
+                        onChange={(event) => handleName(event)}
+                      />
+                      <Button
+                        className={classes.orderPlaceButton}
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disableElevation
+                      >
+                        Place Order
+                      </Button>
+                    </div>
+                  </form>
+                </Paper>
+              </div>
+            </>
+          ) : (
+            <div>Cart is empty, return to <Link href="/">
+              <span className={classes.span}>
+                menu
+              </span>
+            </Link> to add items
             </div>
-          </div>
-          <div>
-            <Button
-              startIcon={<AddIcon />}
-              type="button"
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              onClick={handleOpen}
-              style={{ marginTop: 30 }}
-            >
-              Add to orders
-            </Button>
-          </div>
+          )}
         </div>
-      ) : (
-        <div>Cart is empty, return to <Link href="/">
-          <span className={classes.span}>
-            menu
-          </span>
-        </Link>
-        </div>
-      )}
+      </div>
+
       {editItem ?
         <ItemDialogForm
           onAdd={(cartItem, prevItem) => editCartItem(cartItem, prevItem)}
@@ -160,6 +238,7 @@ const Cart = () => {
             }
             addToOrders(name, scheduledTimeMilliseconds)
           }}>
+
             <DialogContent>
               <TextField
                 className={classes.input}
@@ -230,7 +309,9 @@ const Cart = () => {
           </form>
         </div>
       </Dialog>
+
     </div>
+
   );
 };
 

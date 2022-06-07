@@ -7,6 +7,7 @@ import {
   IconButton,
   Chip,
   makeStyles,
+  Tooltip,
 } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -19,10 +20,9 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${theme.palette.primary.dark}`,
   },
   chipCompleted: {
-    color: theme.palette.primary.dark,
-    // color: "white",
-    backgroundColor: theme.palette.ternary.dark,
-    border: `1px solid ${theme.palette.primary.dark}`,
+    color: theme.palette.secondary.dark,
+    backgroundColor: theme.palette.secondary.light,
+    border: `1px solid ${theme.palette.secondary.dark}`,
   },
   icons: {
     float: "right",
@@ -31,7 +31,9 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-block",
     float: "right",
     padding: 12,
+    // color: "#81c784",
     color: theme.palette.secondary.dark,
+
   }
 }));
 
@@ -42,6 +44,7 @@ const Order = (props) => {
 
   return (
     <Card
+      variant="outlined"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -77,7 +80,8 @@ const Order = (props) => {
           label={status === "ongoing" ? timeReady : "Completed"}
         />
       </div>
-      <CardContent style={{ flexGrow: 2 }}>
+      <CardContent style={{ flexGrow: 2, }}>
+        {/* <div > */}
         {items.map((item, index) => (
           <div key={index}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -97,13 +101,15 @@ const Order = (props) => {
             </ul>
           </div>
         ))}
+        {/* </div> */}
+
+        {/* <div> */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             marginTop: 30,
-          }}
-        >
+          }}>
           <div>Tax:</div>
           <div>{`$${tax}`}</div>
         </div>
@@ -118,24 +124,30 @@ const Order = (props) => {
           <div>Total:</div>
           <div>{`$${totalPlusTax}`}</div>
         </div>
+        {/* </div> */}
       </CardContent>
       <div>
         {status === "ongoing" ? (
           <IconButton
             className={classes.icons}
             onClick={() => markOrderComplete(id)}
-          >
-            <CheckIcon />
+          >     <Tooltip title="Mark complete">
+              <CheckIcon />
+            </Tooltip>
           </IconButton>
         ) : (
           <div
             className={classes.iconCompleted}
           >
+
             <CheckIcon />
+
           </div>
         )}
         <IconButton className={classes.icons} onClick={() => deleteOrder(id)}>
-          <DeleteIcon />
+          <Tooltip title="Delete">
+            <DeleteIcon />
+          </Tooltip>
         </IconButton>
       </div>
     </Card>

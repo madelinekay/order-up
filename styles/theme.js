@@ -14,7 +14,8 @@ const theme = createTheme({
     },
     ternary: {
       main: "#848BA8",
-      dark: "#e0e0e0"
+      dark: "#e0e0e0",
+      light: "#f5f5f5"
     }
   },
   typography: {
