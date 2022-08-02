@@ -32,7 +32,7 @@ export const calculateDuration = (existingOrders, incomingOrder) => {
 	let totalMinutesStoveB = stoveB.reduce((acc, item) => acc += item.time, 0)
 
 	if (totalMinutesStoveA >= totalMinutesStoveB) {
-		let finalItemStoveA = stoveA.at(-1)
+		let finalItemStoveA = stoveA[stoveA.length - 1]
 		let found = incomingOrder.find(({ id }) => id === finalItemStoveA.id)
 		if (found) {
 			return totalMinutesStoveA
@@ -42,7 +42,7 @@ export const calculateDuration = (existingOrders, incomingOrder) => {
 	}
 
 	if (totalMinutesStoveB > totalMinutesStoveA) {
-		let finalItemStoveB = stoveB.at(-1)
+		let finalItemStoveB = stoveB[stoveB.length - 1]
 		let found = incomingOrder.find(({ id }) => id === finalItemStoveB.id)
 		if (found) {
 			return totalMinutesStoveB
